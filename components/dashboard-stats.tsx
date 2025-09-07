@@ -8,9 +8,8 @@ interface DashboardStatsProps {
 
 export function DashboardStats({ totalQuizzes, totalAttempts, averageScore }: DashboardStatsProps) {
   return (
-    <div className="space-y-6 mb-8">
-      {/* First row - 2 cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-shadow">
           <div className="flex items-center">
             <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
@@ -36,11 +35,8 @@ export function DashboardStats({ totalQuizzes, totalAttempts, averageScore }: Da
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Second row - 1 card centered */}
-      <div className="flex justify-center">
-        <div className="w-full md:w-1/2 bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-shadow">
+        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-shadow">
           <div className="flex items-center">
             <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl flex items-center justify-center">
               <TrendingUp className="w-6 h-6 text-white" />

@@ -27,6 +27,7 @@ interface QuizQuestionProps {
   canGoNext: boolean
   isLastQuestion: boolean
   hasAnswered: boolean
+  isSubmitting: boolean
 }
 
 export function QuizQuestion({
@@ -40,6 +41,7 @@ export function QuizQuestion({
   canGoNext,
   isLastQuestion,
   hasAnswered,
+  isSubmitting,
 }: QuizQuestionProps) {
   const progress = ((currentIndex + 1) / totalQuestions) * 100
 
@@ -190,16 +192,17 @@ export function QuizQuestion({
               <div className="flex justify-center pt-8 border-t border-gray-200">
                 {isLastQuestion ? (
                   <Button 
-                    onClick={onSubmit} 
-                    className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-8 py-3 text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                    onClick={onSubmit}
+                    disabled={isSubmitting}
+                    className="bg-gradient-to-r cursor-pointer from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-8 py-3 text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
                   >
-                    🎯 Submit Quiz
+                    {isSubmitting ? "Submitting..." : "🎯 Submit Quiz"}
                   </Button>
                 ) : (
                   <Button 
                     onClick={onNext} 
                     disabled={!canGoNext} 
-                    className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                    className="bg-gradient-to-r cursor-pointer from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                   >
                     Next
                     <ChevronRight className="w-5 h-5 ml-2" />

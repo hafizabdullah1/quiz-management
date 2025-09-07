@@ -37,8 +37,9 @@ export default function QuizPage() {
   const [answeredQuestions, setAnsweredQuestions] = useState<Set<string>>(new Set())
   const [studentName, setStudentName] = useState("")
   const [studentEmail, setStudentEmail] = useState("")
-  const [score, setScore] = useState(0)
   const [attemptId, setAttemptId] = useState<string | null>(null)
+  const [isStarting, setIsStarting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const supabase = createClient()
 
   useEffect(() => {
@@ -146,6 +147,8 @@ export default function QuizPage() {
   }
 
   const startQuiz = async (name: string, email: string) => {
+    if (isStarting) return
+    setIsStarting(true)
     setStudentName(name)
     setStudentEmail(email)
 
@@ -166,6 +169,7 @@ export default function QuizPage() {
 
       if (error) {
         console.error("Error creating attempt:", error)
+        setIsStarting(false)
         return
       }
 
@@ -174,6 +178,7 @@ export default function QuizPage() {
       saveProgress()
     } catch (error) {
       console.error("Error starting quiz:", error)
+      setIsStarting(false)
     }
   }
 
@@ -225,6 +230,8 @@ export default function QuizPage() {
 
   const submitQuiz = async () => {
     if (!quiz || !attemptId) return
+    if (isSubmitting) return
+    setIsSubmitting(true)
 
     try {
       // Calculate score
@@ -279,10 +286,10 @@ export default function QuizPage() {
       localStorage.setItem(`quiz_attempt_${quizId}`, "completed")
       localStorage.removeItem(`quiz_progress_${quizId}`)
 
-      setScore(correctAnswers)
       setState("completed")
     } catch (error) {
       console.error("Error submitting quiz:", error)
+      setIsSubmitting(false)
     }
   }
 
@@ -344,6 +351,7 @@ export default function QuizPage() {
           question_count: quiz.questions.length,
         }}
         onStart={startQuiz}
+        isStarting={isStarting}
       />
     )
   }
@@ -388,6 +396,7 @@ export default function QuizPage() {
         canGoNext={selectedAnswer !== ""}
         isLastQuestion={currentQuestionIndex === quiz.questions.length - 1}
         hasAnswered={hasAnswered}
+        isSubmitting={isSubmitting}
       />
     )
   }
@@ -396,8 +405,6 @@ export default function QuizPage() {
     return (
       <QuizComplete
         quiz={{ title: quiz.title }}
-        score={score}
-        totalQuestions={quiz.questions.length}
         studentName={studentName}
       />
     )

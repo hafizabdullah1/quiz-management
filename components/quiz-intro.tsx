@@ -14,15 +14,16 @@ interface QuizIntroProps {
     description: string | null
     question_count: number
   }
-  onStart: (studentName: string, studentEmail: string) => void
+  onStart: (studentName: string, studentEmail: string) => Promise<void> | void
+  isStarting: boolean
 }
 
-export function QuizIntro({ quiz, onStart }: QuizIntroProps) {
+export function QuizIntro({ quiz, onStart, isStarting }: QuizIntroProps) {
   const [studentName, setStudentName] = useState("")
   const [studentEmail, setStudentEmail] = useState("")
   const [error, setError] = useState("")
 
-  const handleStart = () => {
+  const handleStart = async () => {
     if (!studentName.trim()) {
       setError("Please enter your name")
       return
@@ -37,7 +38,7 @@ export function QuizIntro({ quiz, onStart }: QuizIntroProps) {
     }
 
     setError("")
-    onStart(studentName.trim(), studentEmail.trim())
+    await onStart(studentName.trim(), studentEmail.trim())
   }
 
   return (
@@ -106,21 +107,13 @@ export function QuizIntro({ quiz, onStart }: QuizIntroProps) {
                 </li>
                 <li className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Each question has 4 options, select the best answer</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>You can navigate between questions before submitting</span>
+                  <span>Each question has 4 options, select the correct answer</span>
                 </li>
               </ul>
               <ul className="space-y-3 text-sm text-gray-700">
-                <li className="flex items-start space-x-3">
+              <li className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Make sure to review all your answers before final submission</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Once submitted, you cannot change your answers</span>
+                  <span>Please read the question carefully and select your option wisely. Once selected, the option cannot be changed.</span>
                 </li>
                 <li className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
@@ -173,10 +166,11 @@ export function QuizIntro({ quiz, onStart }: QuizIntroProps) {
             </div>
 
             <Button 
-              onClick={handleStart} 
-              className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-300"
+              onClick={handleStart}
+              disabled={isStarting}
+              className="w-full h-14 cursor-pointer text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              🚀 Start Quiz Now
+              {isStarting ? "Starting..." : "🚀 Start Quiz Now"}
             </Button>
           </CardContent>
         </Card>

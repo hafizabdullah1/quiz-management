@@ -7,7 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Users, TrendingUp, Award } from "lucide-react"
 import Link from "next/link"
 
-export default async function QuizResultsPage({ params }: { params: { id: string } }) {
+export default async function QuizResultsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const supabase = await createClient()
   const {
     data: { user },
@@ -21,7 +22,7 @@ export default async function QuizResultsPage({ params }: { params: { id: string
   const { data: quiz } = await supabase
     .from("quizzes")
     .select("*")
-    .eq("id", params.id)
+    .eq("id", id)
     .eq("teacher_id", user.id)
     .single()
 
@@ -36,7 +37,7 @@ export default async function QuizResultsPage({ params }: { params: { id: string
       *,
       student_answers(*)
     `)
-    .eq("quiz_id", params.id)
+    .eq("quiz_id", id)
     .not("completed_at", "is", null)
     .order("completed_at", { ascending: false })
 
@@ -68,7 +69,7 @@ export default async function QuizResultsPage({ params }: { params: { id: string
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-4">
             <Button variant="outline" asChild>
-              <Link href={`/dashboard/quiz/${params.id}`}>
+              <Link href={`/dashboard/quiz/${id}`}>
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Quiz
               </Link>
@@ -145,7 +146,7 @@ export default async function QuizResultsPage({ params }: { params: { id: string
                   <StudentResultCard
                     key={attempt.id}
                     attempt={attempt}
-                    quizId={params.id}
+                    quizId={id}
                   />
                 ))}
               </div>
