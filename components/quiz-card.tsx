@@ -72,9 +72,11 @@ export function QuizCard({ quiz }: QuizCardProps) {
             </Link>
           </Button>
 
-          <Button size="sm" variant="outline" disabled className="opacity-60">
-            <Edit className="w-4 h-4 mr-1" />
-            Edit (Soon)
+          <Button size="sm" variant="outline" className="bg-white hover:bg-gray-50 bg-amber-500 hover:bg-amber-600 text-white border-none" asChild>
+            <Link href={`/dashboard/edit-quiz/${quiz.id}`}>
+              <Edit className="w-4 h-4 mr-1" />
+              Edit
+            </Link>
           </Button>
 
           <ShareButton url={shareUrl} />

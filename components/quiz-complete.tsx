@@ -6,12 +6,17 @@ import { CheckCircle } from "lucide-react";
 
 interface QuizCompleteProps {
   quiz: {
-    title: string;
-  };
-  studentName: string;
+    title: string
+  }
+  studentName: string
+  score?: number
+  totalQuestions?: number
+  isTerminated?: boolean
 }
 
-export function QuizComplete({ quiz, studentName }: QuizCompleteProps) {
+export function QuizComplete({ quiz, studentName, score, totalQuestions, isTerminated }: QuizCompleteProps) {
+  const percentage = score !== undefined && totalQuestions ? Math.round((score / totalQuestions) * 100) : 0
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
       <div className="max-w-3xl w-full">
@@ -20,13 +25,25 @@ export function QuizComplete({ quiz, studentName }: QuizCompleteProps) {
             <div className="mx-auto w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-6 shadow-lg">
               <CheckCircle className="w-10 h-10 text-white" />
             </div>
-            <CardTitle className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-              Quiz Completed! 🎉
-            </CardTitle>
-            <p className="text-gray-600 mt-3 text-lg">
-              Thank you for taking the quiz,{" "}
-              <span className="font-semibold text-blue-600">{studentName}</span>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-4">
+              {isTerminated ? "Quiz Terminated" : "Quiz Submitted!"}
+            </h1>
+            <p className="text-gray-600 text-lg mb-6">
+              Thank you, <span className="font-semibold text-gray-900">{studentName}</span>. 
+              {isTerminated 
+                ? " Your quiz was automatically submitted due to multiple tab switches." 
+                : " Your answers have been recorded successfully."}
             </p>
+
+            {isTerminated && (
+                <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-left">
+                    <h3 className="text-red-800 font-bold mb-1">Violation Detected</h3>
+                    <p className="text-red-600 text-sm">
+                        You exceeded the maximum allowed tab switches (3). As a result, your quiz was immediately submitted with the progress you had made.
+                    </p>
+                </div>
+            )}
+
           </CardHeader>
           <CardContent className="space-y-8">
             {/* Quiz Info */}

@@ -1,11 +1,20 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { createClient } from "@/lib/supabase/client"
 import { QuizIntro } from "@/components/quiz-intro"
 import { QuizQuestion } from "@/components/quiz-question"
 import { QuizComplete } from "@/components/quiz-complete"
 import { useParams } from "next/navigation"
+import { useProctoring } from "@/hooks/use-proctoring"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 interface Question {
   id: string
@@ -14,7 +23,6 @@ interface Question {
   option_b: string
   option_c: string
   option_d: string
-  correct_answer: string
 }
 
 interface Quiz {
@@ -22,6 +30,7 @@ interface Quiz {
   title: string
   description: string | null
   is_active: boolean
+  time_per_question: number
   questions: Question[]
 }
 
@@ -40,52 +49,34 @@ export default function QuizPage() {
   const [attemptId, setAttemptId] = useState<string | null>(null)
   const [isStarting, setIsStarting] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const supabase = createClient()
+  const [finalScore, setFinalScore] = useState<number | undefined>(undefined)
 
-  useEffect(() => {
-    checkPreviousAttempt()
-    loadQuiz()
-  }, [quizId])
+  // Advanced Proctoring Hook
+  const {
+    tabSwitches,
+    windowBlurs,
+    fullscreenLeaves,
+    logs,
+    showWarning,
+    dismissWarning,
+    enterFullscreen
+  } = useProctoring(state === "taking")
 
-  // Save progress whenever state changes
-  useEffect(() => {
-    if (state === "taking" && quiz && studentName && studentEmail) {
-      saveProgress()
-    }
-  }, [state, currentQuestionIndex, answers, answeredQuestions, studentName, studentEmail, quiz])
-
-  const loadQuiz = async () => {
+  const loadQuiz = async (restoredState?: string) => {
     try {
-      const { data, error } = await supabase
-        .from("quizzes")
-        .select(`
-          *,
-          questions(
-            id,
-            question_text,
-            option_a,
-            option_b,
-            option_c,
-            option_d,
-            correct_answer,
-            question_order
-          )
-        `)
-        .order('question_order', { foreignTable: 'questions' })
-        .eq("id", quizId)
-        .eq("is_active", true)
-        .single()
-
-      if (error || !data) {
-        console.error("Quiz loading error:", error)
-        setState("not-found")
-        return
-      }
+      const response = await fetch(`/api/quiz/${quizId}`)
+      if (!response.ok) throw new Error("Failed to load quiz")
+      const data = await response.json()
 
       console.log("Quiz loaded:", data)
       setQuiz(data)
-      setState(prevState => prevState === "already-taken" ? "already-taken" : "intro")
+      setState(prevState => {
+        if (restoredState) return restoredState as QuizState
+        if (prevState === "already-taken" || prevState === "taking") return prevState
+        return "intro"
+      })
     } catch (error) {
+      console.error("Quiz loading error:", error)
       setState("not-found")
     }
   }
@@ -99,8 +90,7 @@ export default function QuizPage() {
     
     if (previousAttempt === "completed") {
       console.log("Quiz already completed, setting state to already-taken")
-      setState("already-taken")
-      return
+      return "already-taken"
     }
     
     if (savedProgress) {
@@ -116,14 +106,27 @@ export default function QuizPage() {
         setAnsweredQuestions(new Set(progress.answeredQuestions || []))
         
         if (progress.state && progress.state !== "intro") {
-          setState(progress.state)
+          return progress.state
         }
       } catch (error) {
         console.error("Error parsing saved progress:", error)
         localStorage.removeItem(progressKey)
       }
     }
+    return undefined
   }
+
+  useEffect(() => {
+    const restoredState = checkPreviousAttempt()
+    loadQuiz(restoredState)
+  }, [quizId])
+
+  // Save progress whenever state changes
+  useEffect(() => {
+    if (state === "taking" && quiz && studentName && studentEmail) {
+      saveProgress()
+    }
+  }, [state, currentQuestionIndex, answers, answeredQuestions, studentName, studentEmail, quiz])
 
   const saveProgress = () => {
     const progressKey = `quiz_progress_${quizId}`
@@ -152,26 +155,24 @@ export default function QuizPage() {
     setStudentName(name)
     setStudentEmail(email)
 
-    // Create quiz attempt record
+    // Force fullscreen mode
+    enterFullscreen()
+
     try {
       const browserFingerprint = generateBrowserFingerprint()
-      const { data: attempt, error } = await supabase
-        .from("quiz_attempts")
-        .insert({
-          quiz_id: quizId,
+      
+      const response = await fetch(`/api/quiz/${quizId}/attempt`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           student_name: name,
           student_email: email,
-          browser_fingerprint: browserFingerprint,
-          total_questions: quiz?.questions?.length || 0,
+          browser_fingerprint: browserFingerprint
         })
-        .select()
-        .single()
+      })
 
-      if (error) {
-        console.error("Error creating attempt:", error)
-        setIsStarting(false)
-        return
-      }
+      if (!response.ok) throw new Error("Failed to create attempt")
+      const attempt = await response.json()
 
       setAttemptId(attempt.id)
       setState("taking")
@@ -183,7 +184,6 @@ export default function QuizPage() {
   }
 
   const generateBrowserFingerprint = () => {
-    // Create a simple hash-based fingerprint instead of using canvas data
     const fingerprint = 
       navigator.userAgent +
       navigator.language +
@@ -192,12 +192,11 @@ export default function QuizPage() {
       new Date().getTimezoneOffset() +
       navigator.platform
 
-    // Create a simple hash to keep it under the size limit
     let hash = 0
     for (let i = 0; i < fingerprint.length; i++) {
       const char = fingerprint.charCodeAt(i)
       hash = ((hash << 5) - hash) + char
-      hash = hash & hash // Convert to 32-bit integer
+      hash = hash & hash
     }
     
     return `fp_${Math.abs(hash).toString(36)}_${Date.now().toString(36)}`
@@ -207,19 +206,15 @@ export default function QuizPage() {
     if (!quiz) return
     const questionId = quiz.questions[currentQuestionIndex].id
     
-    // Check if this question has already been answered
     if (answeredQuestions.has(questionId)) {
       console.log("Question already answered, ignoring change")
       return
     }
     
-    // Add to answered questions set
     setAnsweredQuestions(prev => new Set([...prev, questionId]))
     setAnswers({ ...answers, [questionId]: answer })
     saveProgress()
   }
-
-
 
   const goToNext = () => {
     if (quiz && currentQuestionIndex < quiz.questions.length - 1) {
@@ -228,65 +223,42 @@ export default function QuizPage() {
     }
   }
 
-  const submitQuiz = async () => {
+  const submitQuiz = async (terminated = false) => {
     if (!quiz || !attemptId) return
     if (isSubmitting) return
     setIsSubmitting(true)
 
     try {
-      // Calculate score
-      let correctAnswers = 0
-      const studentAnswers = []
-
-      for (const question of quiz.questions) {
-        const studentAnswer = answers[question.id] || ""
-        const isCorrect = studentAnswer === question.correct_answer
-
-        if (isCorrect) correctAnswers++
-
-        studentAnswers.push({
-          attempt_id: attemptId,
-          question_id: question.id,
-          selected_answer: studentAnswer,
-          is_correct: isCorrect,
+      const response = await fetch(`/api/quiz/${quizId}/submit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          attemptId,
+          answers,
+          tabSwitches,
+          windowBlurs,
+          fullscreenLeaves,
+          proctoringLogs: logs,
+          terminated: false // per requirements, never terminate
         })
-      }
+      })
 
-      // Save student answers
-      console.log("Saving student answers:", studentAnswers)
-      const { data: savedAnswers, error: answersError } = await supabase.from("student_answers").insert(studentAnswers).select()
+      if (!response.ok) throw new Error("Failed to submit answers")
+      const result = await response.json()
+      
+      // Save final score state
+      setFinalScore(result.score)
 
-      if (answersError) {
-        console.error("Error saving answers:", answersError)
-        return
-      }
-
-      console.log("Successfully saved answers:", savedAnswers)
-
-      // Update attempt with completion
-      console.log("Updating attempt with score:", correctAnswers, "out of", quiz.questions.length)
-      const { data: updatedAttempt, error: attemptError } = await supabase
-        .from("quiz_attempts")
-        .update({
-          completed_at: new Date().toISOString(),
-          score: correctAnswers,
-          total_questions: quiz.questions.length,
-        })
-        .eq("id", attemptId)
-        .select()
-
-      if (attemptError) {
-        console.error("Error updating attempt:", attemptError)
-        return
-      }
-
-      console.log("Successfully updated attempt:", updatedAttempt)
-
-      // Mark as completed in localStorage and clean up progress
+      // Clean up local progress
       localStorage.setItem(`quiz_attempt_${quizId}`, "completed")
       localStorage.removeItem(`quiz_progress_${quizId}`)
 
       setState("completed")
+      
+      // Exit fullscreen mode if still active
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(e => console.error(e));
+      }
     } catch (error) {
       console.error("Error submitting quiz:", error)
       setIsSubmitting(false)
@@ -357,7 +329,6 @@ export default function QuizPage() {
   }
 
   if (state === "taking" && quiz) {
-    // Check if questions exist and current index is valid
     if (!quiz.questions || quiz.questions.length === 0) {
       return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
@@ -385,19 +356,43 @@ export default function QuizPage() {
     const hasAnswered = answeredQuestions.has(currentQuestion.id)
 
     return (
-      <QuizQuestion
-        question={currentQuestion}
-        currentIndex={currentQuestionIndex}
-        totalQuestions={quiz.questions.length}
-        selectedAnswer={selectedAnswer}
-        onAnswerChange={handleAnswerChange}
-        onNext={goToNext}
-        onSubmit={submitQuiz}
-        canGoNext={selectedAnswer !== ""}
-        isLastQuestion={currentQuestionIndex === quiz.questions.length - 1}
-        hasAnswered={hasAnswered}
-        isSubmitting={isSubmitting}
-      />
+      <>
+        {/* Proctoring Warning Modal */}
+        <AlertDialog open={showWarning} onOpenChange={dismissWarning}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-red-600 flex items-center">
+                <span className="text-2xl mr-2">⚠️</span> Suspicious Activity Detected
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-base text-gray-700">
+                You have switched tabs, changed windows, or exited fullscreen. 
+                <br /><br />
+                <strong>This incident has been recorded.</strong> Please remain focused on the quiz window. Further violations will also be logged. Do not do it again.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction onClick={dismissWarning} className="bg-red-600 hover:bg-red-700">
+                I Understand, Return to Quiz
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        <QuizQuestion
+          question={currentQuestion}
+          currentIndex={currentQuestionIndex}
+          totalQuestions={quiz.questions.length}
+          selectedAnswer={selectedAnswer}
+          onAnswerChange={handleAnswerChange}
+          onNext={goToNext}
+          onSubmit={() => submitQuiz(false)}
+          canGoNext={selectedAnswer !== ""}
+          isLastQuestion={currentQuestionIndex === quiz.questions.length - 1}
+          hasAnswered={hasAnswered}
+          isSubmitting={isSubmitting}
+          timeLimit={quiz.time_per_question || 30}
+        />
+      </>
     )
   }
 
@@ -406,6 +401,9 @@ export default function QuizPage() {
       <QuizComplete
         quiz={{ title: quiz.title }}
         studentName={studentName}
+        score={finalScore}
+        totalQuestions={quiz.questions.length}
+        isTerminated={false}
       />
     )
   }

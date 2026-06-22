@@ -30,6 +30,13 @@ interface StudentResultDetailsProps {
     total_questions: number
     completed_at: string
     started_at: string
+    warnings_count?: number
+    tab_switches_count?: number
+    window_blurs_count?: number
+    fullscreen_leaves_count?: number
+    proctoring_logs?: any[]
+    is_terminated?: boolean
+    terminated_reason?: string
   }
   answers: StudentAnswer[]
 }
@@ -95,6 +102,72 @@ export function StudentResultDetails({ attempt, answers }: StudentResultDetailsP
           </div>
         </CardHeader>
       </Card>
+
+      {/* Proctoring Report */}
+      {((attempt.warnings_count && attempt.warnings_count > 0) || (attempt.tab_switches_count && attempt.tab_switches_count > 0) || (attempt.window_blurs_count && attempt.window_blurs_count > 0) || (attempt.fullscreen_leaves_count && attempt.fullscreen_leaves_count > 0) || attempt.is_terminated) && (
+        <Card className={`border-l-4 ${attempt.is_terminated ? "border-l-red-500" : "border-l-yellow-500"}`}>
+            <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center space-x-2">
+                    <span className="text-xl">⚠️</span>
+                    <span>Proctoring Report</span>
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div className="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        <div className="text-gray-500 text-xs font-medium mb-1">Total Warnings (Legacy)</div>
+                        <div className="text-2xl font-bold text-gray-800">{attempt.warnings_count || 0}</div>
+                    </div>
+                    <div className="bg-orange-50 p-3 rounded-lg border border-orange-100">
+                        <div className="text-orange-600 text-xs font-medium mb-1">Tab Switches</div>
+                        <div className="text-2xl font-bold text-orange-700">{attempt.tab_switches_count || 0}</div>
+                    </div>
+                    <div className="bg-red-50 p-3 rounded-lg border border-red-100">
+                        <div className="text-red-600 text-xs font-medium mb-1">Window Focus Lost</div>
+                        <div className="text-2xl font-bold text-red-700">{attempt.window_blurs_count || 0}</div>
+                    </div>
+                    <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-100">
+                        <div className="text-yellow-600 text-xs font-medium mb-1">Fullscreen Exits</div>
+                        <div className="text-2xl font-bold text-yellow-700">{attempt.fullscreen_leaves_count || 0}</div>
+                    </div>
+                </div>
+
+                <div>
+                    <span className="text-gray-600 font-medium mr-2">Status:</span>
+                    {attempt.is_terminated ? (
+                        <span className="text-red-600 font-bold">Terminated ({attempt.terminated_reason || "Violation"})</span>
+                    ) : (
+                        <span className="text-yellow-600 font-bold">Flagged for Review</span>
+                    )}
+                </div>
+
+                {attempt.proctoring_logs && attempt.proctoring_logs.length > 0 && (
+                    <div className="mt-6 pt-4 border-t border-gray-100">
+                        <h4 className="text-sm font-semibold text-gray-700 mb-3">Violation Timeline</h4>
+                        <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
+                            {attempt.proctoring_logs.map((log: any, i: number) => {
+                                let label = log.type;
+                                let color = "text-gray-600";
+                                if (log.type === "tab_switch") { label = "Switched Tab"; color = "text-orange-600"; }
+                                if (log.type === "window_blur") { label = "Lost Window Focus"; color = "text-red-600"; }
+                                if (log.type === "fullscreen_exit") { label = "Exited Fullscreen"; color = "text-yellow-600"; }
+
+                                return (
+                                    <div key={i} className="flex justify-between items-center text-sm bg-gray-50 p-2 rounded border border-gray-100">
+                                        <span className={`font-medium ${color}`}>{label}</span>
+                                        <span className="text-gray-500 text-xs font-mono">
+                                            {new Date(log.timestamp).toLocaleTimeString()}
+                                        </span>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </div>
+                )}
+            </CardContent>
+        </Card>
+      )}
+
 
       {/* Questions and Answers */}
       <div className="space-y-4">

@@ -8,7 +8,8 @@ import { ArrowLeft, Share2, BarChart3, Edit, Users } from "lucide-react"
 import Link from "next/link"
 import { CopyButton } from "@/components/copy-button"
 
-export default async function QuizDetailPage({ params }: { params: { id: string } }) {
+export default async function QuizDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id: quizId } = await params;
   const supabase = await createClient()
   const {
     data: { user },
@@ -26,7 +27,7 @@ export default async function QuizDetailPage({ params }: { params: { id: string 
       questions(*),
       quiz_attempts(count)
     `)
-    .eq("id", params.id)
+    .eq("id", quizId)
     .eq("teacher_id", user.id)
     .single()
 

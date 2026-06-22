@@ -2,8 +2,8 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react"
+import { useRouter, useParams } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { TeacherNav } from "@/components/teacher-nav"
 import { QuestionForm } from "@/components/question-form"
@@ -13,9 +13,8 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Plus, Save, ArrowLeft } from "lucide-react"
+import { Plus, Save, ArrowLeft, Loader2 } from "lucide-react"
 import Link from "next/link"
-import { useEffect } from "react"
 
 interface Question {
   id: string
@@ -27,44 +26,80 @@ interface Question {
   correct_answer: "A" | "B" | "C" | "D"
 }
 
-export default function CreateQuizPage() {
+export default function EditQuizPage() {
   const [user, setUser] = useState<any>(null)
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [timePerQuestion, setTimePerQuestion] = useState(30)
-  const [questions, setQuestions] = useState<Question[]>([
-    {
-      id: crypto.randomUUID(),
-      question: "",
-      option_a: "",
-      option_b: "",
-      option_c: "",
-      option_d: "",
-      correct_answer: "A",
-    },
-  ])
-  const [loading, setLoading] = useState(false)
+  const [questions, setQuestions] = useState<Question[]>([])
+  const [deletedQuestionIds, setDeletedQuestionIds] = useState<string[]>([])
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
   const [error, setError] = useState("")
   const router = useRouter()
+  const params = useParams()
   const supabase = createClient()
 
   useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
+    const init = async () => {
+      // 1. Check User
+      const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
         router.push("/auth/login")
-      } else {
-        setUser(user)
+        return
+      }
+      setUser(user)
+
+      // 2. Fetch Quiz Data
+      try {
+        const { data: quiz, error: quizError } = await supabase
+          .from("quizzes")
+          .select("*")
+          .eq("id", params.id)
+          .single()
+
+        if (quizError) throw quizError
+        if (quiz.teacher_id !== user.id) {
+          throw new Error("Unauthorized to edit this quiz")
+        }
+
+        setTitle(quiz.title)
+        setDescription(quiz.description || "")
+        setTimePerQuestion(quiz.time_per_question || 30)
+
+        // 3. Fetch Questions
+        const { data: fetchedQuestions, error: questionsError } = await supabase
+          .from("questions")
+          .select("*")
+          .eq("quiz_id", params.id)
+          .order("question_order", { ascending: true })
+
+        if (questionsError) throw questionsError
+
+        const mappedQuestions = fetchedQuestions.map((q: any) => ({
+          id: q.id,
+          question: q.question_text,
+          option_a: q.option_a,
+          option_b: q.option_b,
+          option_c: q.option_c,
+          option_d: q.option_d,
+          correct_answer: q.correct_answer,
+        }))
+
+        setQuestions(mappedQuestions)
+      } catch (err: any) {
+        setError(err.message || "Failed to load quiz")
+      } finally {
+        setLoading(false)
       }
     }
-    getUser()
-  }, [router, supabase.auth])
+
+    init()
+  }, [router, supabase, params.id])
 
   const addQuestion = () => {
     const newQuestion: Question = {
-      id: crypto.randomUUID(),
+      id: crypto.randomUUID(), // Temp ID for new questions
       question: "",
       option_a: "",
       option_b: "",
@@ -80,6 +115,13 @@ export default function CreateQuizPage() {
   }
 
   const deleteQuestion = (id: string) => {
+    // If it's a UUID from DB (not a temp crypto UUID), mark for deletion
+    // Simple check: DB IDs are usually UUIDs too, but we can check if it exists in original questions
+    // For now, simpler approach: just add to deleted list. 
+    // If it was a new temp question, deleting it from state is enough, 
+    // but adding it to deletedQuestionIds won't hurt because DB won't find it anyway.
+    
+    setDeletedQuestionIds([...deletedQuestionIds, id])
     setQuestions(questions.filter((q) => q.id !== id))
   }
 
@@ -113,28 +155,48 @@ export default function CreateQuizPage() {
     e.preventDefault()
     if (!validateForm()) return
 
-    setLoading(true)
+    setSaving(true)
     setError("")
 
     try {
-      // Create quiz
-      const { data: quiz, error: quizError } = await supabase
+      // 1. Update Quiz Details
+      const { error: quizError } = await supabase
         .from("quizzes")
-        .insert({
+        .update({
           title: title.trim(),
           description: description.trim() || null,
-          teacher_id: user.id,
-          is_active: true,
           time_per_question: timePerQuestion,
         })
-        .select()
-        .single()
+        .eq("id", params.id)
 
       if (quizError) throw quizError
 
-      // Create questions
-      const questionsToInsert = questions.map((q, index) => ({
-        quiz_id: quiz.id,
+      // 2. Handle Deletions
+      if (deletedQuestionIds.length > 0) {
+        const { error: deleteError } = await supabase
+          .from("questions")
+          .delete()
+          .in("id", deletedQuestionIds)
+        
+        if (deleteError) {
+          console.error("Error deleting questions:", deleteError)
+          // Continue anyway, or throw? 
+          // If ID was temp, Supabase will just delete 0 rows, which is fine.
+        }
+      }
+
+      // 3. Upsert Questions
+      // We need to differentiate new vs old. 
+      // Supabase .upsert() works if we provide the primary key (id).
+      // For NEW questions, the 'id' in state is a random UUID generated by crypto.randomUUID().
+      // This is perfectly valid to use as the ID for the new row if we want, 
+      // OR we can omit ID and let DB generate it.
+      // But `upsert` needs to match existing rows. 
+      // Safe bet: Use the ID we have. If it matches DB, it updates. If not, it inserts.
+      
+      const questionsToUpsert = questions.map((q, index) => ({
+        id: q.id, // Use the ID from state (either from DB or generated)
+        quiz_id: params.id,
         question_text: q.question.trim(),
         option_a: q.option_a.trim(),
         option_b: q.option_b.trim(),
@@ -144,21 +206,30 @@ export default function CreateQuizPage() {
         question_order: index + 1,
       }))
 
-      const { error: questionsError } = await supabase.from("questions").insert(questionsToInsert)
+      const { error: questionsError } = await supabase
+        .from("questions")
+        .upsert(questionsToUpsert)
 
       if (questionsError) throw questionsError
 
       router.push("/dashboard")
+      router.refresh()
     } catch (err: any) {
-      setError(err.message || "Failed to create quiz")
+      setError(err.message || "Failed to update quiz")
     } finally {
-      setLoading(false)
+      setSaving(false)
     }
   }
 
-  if (!user) {
-    return <div>Loading...</div>
+  if (loading) {
+    return (
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        </div>
+    )
   }
+
+  if (!user) return null
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -175,8 +246,8 @@ export default function CreateQuizPage() {
               </Link>
             </Button>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Create New Quiz</h1>
-              <p className="text-gray-600 mt-1">Build your quiz with multiple choice questions</p>
+              <h1 className="text-3xl font-bold text-gray-900">Edit Quiz</h1>
+              <p className="text-gray-600 mt-1">Update your quiz questions and details</p>
             </div>
           </div>
         </div>
@@ -222,9 +293,6 @@ export default function CreateQuizPage() {
                   className="mt-1"
                   required
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                  How long students have to answer each question. Default is 30 seconds.
-                </p>
               </div>
             </CardContent>
           </Card>
@@ -263,13 +331,16 @@ export default function CreateQuizPage() {
             <Button type="button" variant="outline" asChild>
               <Link href="/dashboard">Cancel</Link>
             </Button>
-            <Button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-700">
-              {loading ? (
-                "Creating Quiz..."
+            <Button type="submit" disabled={saving} className="bg-blue-600 hover:bg-blue-700">
+              {saving ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Updating...
+                </>
               ) : (
                 <>
                   <Save className="w-4 h-4 mr-2" />
-                  Create Quiz
+                  Update Quiz
                 </>
               )}
             </Button>

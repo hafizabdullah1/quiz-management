@@ -15,6 +15,11 @@ interface StudentResultCardProps {
     total_questions: number
     completed_at: string
     started_at: string
+    warnings_count?: number
+    tab_switches_count?: number
+    window_blurs_count?: number
+    fullscreen_leaves_count?: number
+    is_terminated?: boolean
   }
   quizId: string
 }
@@ -53,7 +58,20 @@ export function StudentResultCard({ attempt, quizId }: StudentResultCardProps) {
               <span>{attempt.student_email}</span>
             </div>
           </div>
-          <Badge className={getScoreColor(percentage)}>{percentage}%</Badge>
+          <div className="flex items-center space-x-2">
+            {attempt.is_terminated && (
+                <Badge variant="destructive">Terminated</Badge>
+            )}
+            {((attempt.warnings_count && attempt.warnings_count > 0) || 
+              (attempt.tab_switches_count && attempt.tab_switches_count > 0) || 
+              (attempt.window_blurs_count && attempt.window_blurs_count > 0) || 
+              (attempt.fullscreen_leaves_count && attempt.fullscreen_leaves_count > 0)) && !attempt.is_terminated && (
+                <Badge variant="outline" className="border-yellow-500 text-yellow-600">
+                    Flagged
+                </Badge>
+            )}
+            <Badge className={getScoreColor(percentage)}>{percentage}%</Badge>
+          </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
