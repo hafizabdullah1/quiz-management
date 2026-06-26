@@ -7,7 +7,8 @@ import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { DownloadButton } from "@/components/download-button"
 
-export default async function StudentResultDetailPage({ params }: { params: { id: string; attemptId: string } }) {
+export default async function StudentResultDetailPage({ params }: { params: Promise<{ id: string; attemptId: string }> }) {
+  const { id, attemptId } = await params;
   const supabase = await createClient()
   const {
     data: { user },
@@ -27,21 +28,21 @@ export default async function StudentResultDetailPage({ params }: { params: { id
         teacher_id
       )
     `)
-    .eq("id", params.attemptId)
-    .eq("quiz_id", params.id)
+    .eq("id", attemptId)
+    .eq("quiz_id", id)
     .single()
 
   // Fetch student answers separately
   const { data: studentAnswers, error: answersError } = await supabase
     .from("student_answers")
     .select("*")
-    .eq("attempt_id", params.attemptId)
+    .eq("attempt_id", attemptId)
 
   // Fetch questions separately
   const { data: questions, error: questionsError } = await supabase
     .from("questions")
     .select("*")
-    .eq("quiz_id", params.id)
+    .eq("quiz_id", id)
 
   // Combine the data
   if (attempt && studentAnswers && questions) {
@@ -77,7 +78,7 @@ export default async function StudentResultDetailPage({ params }: { params: { id
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-4">
             <Button variant="outline" asChild>
-              <Link href={`/dashboard/quiz/${params.id}/results`}>
+              <Link href={`/dashboard/quiz/${id}/results`}>
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Results
               </Link>
@@ -88,8 +89,8 @@ export default async function StudentResultDetailPage({ params }: { params: { id
             </div>
           </div>
           <DownloadButton 
-            quizId={params.id} 
-            attemptId={params.attemptId} 
+            quizId={id} 
+            attemptId={attemptId} 
           />
         </div>
 

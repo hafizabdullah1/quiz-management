@@ -115,8 +115,10 @@ export function StudentResultDetails({ attempt, answers }: StudentResultDetailsP
             <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                     <div className="bg-gray-50 p-3 rounded-lg border border-gray-100">
-                        <div className="text-gray-500 text-xs font-medium mb-1">Total Warnings (Legacy)</div>
-                        <div className="text-2xl font-bold text-gray-800">{attempt.warnings_count || 0}</div>
+                        <div className="text-gray-500 text-xs font-medium mb-1">Total Violations</div>
+                        <div className="text-2xl font-bold text-gray-800">
+                          {(attempt.tab_switches_count || 0) + (attempt.window_blurs_count || 0) + (attempt.fullscreen_leaves_count || 0)}
+                        </div>
                     </div>
                     <div className="bg-orange-50 p-3 rounded-lg border border-orange-100">
                         <div className="text-orange-600 text-xs font-medium mb-1">Tab Switches</div>

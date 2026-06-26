@@ -62,10 +62,10 @@ export function StudentResultCard({ attempt, quizId }: StudentResultCardProps) {
             {attempt.is_terminated && (
                 <Badge variant="destructive">Terminated</Badge>
             )}
-            {((attempt.warnings_count && attempt.warnings_count > 0) || 
-              (attempt.tab_switches_count && attempt.tab_switches_count > 0) || 
-              (attempt.window_blurs_count && attempt.window_blurs_count > 0) || 
-              (attempt.fullscreen_leaves_count && attempt.fullscreen_leaves_count > 0)) && !attempt.is_terminated && (
+            {((attempt.warnings_count || 0) > 0 || 
+              (attempt.tab_switches_count || 0) > 0 || 
+              (attempt.window_blurs_count || 0) > 0 || 
+              (attempt.fullscreen_leaves_count || 0) > 0) && !attempt.is_terminated && (
                 <Badge variant="outline" className="border-yellow-500 text-yellow-600">
                     Flagged
                 </Badge>

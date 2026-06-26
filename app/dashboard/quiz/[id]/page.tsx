@@ -131,9 +131,11 @@ export default async function QuizDetailPage({ params }: { params: Promise<{ id:
               View Results
             </Link>
           </Button>
-          <Button variant="outline" disabled>
-            <Edit className="w-4 h-4 mr-2" />
-            Edit Quiz (Coming Soon)
+          <Button variant="outline" asChild>
+            <Link href={`/dashboard/edit-quiz/${quiz.id}`}>
+              <Edit className="w-4 h-4 mr-2" />
+              Edit Quiz
+            </Link>
           </Button>
         </div>
 
