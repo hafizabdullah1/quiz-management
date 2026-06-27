@@ -13,9 +13,11 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Plus, Save, ArrowLeft } from "lucide-react"
+import { Plus, Save, ArrowLeft, Download } from "lucide-react"
 import Link from "next/link"
 import { useEffect } from "react"
+import { QuestionBankModal } from "@/components/question-bank-modal"
+import { QuestionBankItem } from "./question-bank/actions"
 
 interface Question {
   id: string
@@ -45,6 +47,7 @@ export default function CreateQuizPage() {
   ])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [isBankModalOpen, setIsBankModalOpen] = useState(false)
   const router = useRouter()
   const supabase = createClient()
 
@@ -73,6 +76,25 @@ export default function CreateQuizPage() {
       correct_answer: "A",
     }
     setQuestions([...questions, newQuestion])
+  }
+
+  const handleImportFromBank = (importedQuestions: QuestionBankItem[]) => {
+    const newQuestions: Question[] = importedQuestions.map(q => ({
+      id: crypto.randomUUID(),
+      question: q.question_text,
+      option_a: q.option_a,
+      option_b: q.option_b,
+      option_c: q.option_c,
+      option_d: q.option_d,
+      correct_answer: q.correct_answer,
+    }))
+    
+    // If there's only one empty question, replace it. Otherwise, append.
+    if (questions.length === 1 && questions[0].question === "" && questions[0].option_a === "") {
+      setQuestions(newQuestions)
+    } else {
+      setQuestions([...questions, ...newQuestions])
+    }
   }
 
   const updateQuestion = (id: string, field: keyof Question, value: string) => {
@@ -240,10 +262,16 @@ export default function CreateQuizPage() {
           <div>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-gray-900">Questions</h2>
-              <Button type="button" onClick={addQuestion} variant="outline">
-                <Plus className="w-4 h-4 mr-2" />
-                Add Question
-              </Button>
+              <div className="flex gap-2">
+                <Button type="button" onClick={() => setIsBankModalOpen(true)} variant="outline" className="text-blue-600 border-blue-200 hover:bg-blue-50">
+                  <Download className="w-4 h-4 mr-2" />
+                  Import from Bank
+                </Button>
+                <Button type="button" onClick={addQuestion} variant="outline">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Question
+                </Button>
+              </div>
             </div>
 
             {questions.map((question, index) => (
@@ -275,6 +303,12 @@ export default function CreateQuizPage() {
             </Button>
           </div>
         </form>
+
+        <QuestionBankModal 
+          isOpen={isBankModalOpen} 
+          onClose={() => setIsBankModalOpen(false)} 
+          onImport={handleImportFromBank} 
+        />
       </div>
     </div>
   )

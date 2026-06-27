@@ -1,0 +1,6 @@
+question_text,option_a,option_b,option_c,option_d,correct_answer,category,difficulty
+"What is the capital of France?","London","Berlin","Paris","Madrid",C,"Geography","Easy"
+"Which planet is known as the Red Planet?","Venus","Mars","Jupiter","Saturn",B,"Science","Easy"
+"What is 15 + 25?","30","35","40","45",C,"Math","Easy"
+"Who wrote Romeo and Juliet?","Charles Dickens","William Shakespeare","Mark Twain","Jane Austen",B,"Literature","Medium"
+"What is the chemical symbol for Gold?","Au","Ag","Fe","Cu",A,"Science","Medium"

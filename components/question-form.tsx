@@ -6,7 +6,9 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Trash2 } from "lucide-react"
+import { Trash2, Save, Loader2, Check } from "lucide-react"
+import { useState } from "react"
+import { saveToBank } from "@/app/dashboard/question-bank/actions"
 
 interface Question {
   id: string
@@ -27,20 +29,63 @@ interface QuestionFormProps {
 }
 
 export function QuestionForm({ question, index, onUpdate, onDelete, canDelete }: QuestionFormProps) {
+  const [savingToBank, setSavingToBank] = useState(false)
+  const [savedToBank, setSavedToBank] = useState(false)
+
+  const handleSaveToBank = async () => {
+    if (!question.question || !question.option_a || !question.option_b || !question.option_c || !question.option_d) {
+      alert("Please fill all fields before saving to bank.")
+      return
+    }
+
+    setSavingToBank(true)
+    try {
+      await saveToBank({
+        question_text: question.question,
+        option_a: question.option_a,
+        option_b: question.option_b,
+        option_c: question.option_c,
+        option_d: question.option_d,
+        correct_answer: question.correct_answer,
+        category: null,
+        difficulty: "Medium"
+      })
+      setSavedToBank(true)
+      setTimeout(() => setSavedToBank(false), 3000)
+    } catch (error) {
+      alert("Failed to save to bank")
+    } finally {
+      setSavingToBank(false)
+    }
+  }
+
   return (
     <Card className="mb-6">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
         <CardTitle className="text-lg">Question {index + 1}</CardTitle>
-        {canDelete && (
+        <div className="flex gap-2">
           <Button
             variant="outline"
             size="sm"
-            onClick={() => onDelete(question.id)}
-            className="text-red-600 hover:text-red-700"
+            onClick={handleSaveToBank}
+            disabled={savingToBank || savedToBank}
+            className={savedToBank ? "text-green-600 border-green-200 bg-green-50" : "text-blue-600 border-blue-200 hover:bg-blue-50"}
+            title="Save to Question Bank"
           >
-            <Trash2 className="w-4 h-4" />
+            {savingToBank ? <Loader2 className="w-4 h-4 animate-spin" /> : savedToBank ? <Check className="w-4 h-4" /> : <Save className="w-4 h-4" />}
           </Button>
-        )}
+          {canDelete && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onDelete(question.id)}
+              className="text-red-600 hover:text-red-700 hover:bg-red-50"
+              title="Delete Question"
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          )}
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
