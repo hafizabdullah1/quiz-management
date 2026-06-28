@@ -1,0 +1,91 @@
+question_text,option_a,option_b,option_c,option_d,correct_answer,category,difficulty
+What does the HTML <template> element do?,It renders its content immediately on page load.,It holds client-side content that is not to be rendered when a page is loaded but may subsequently be instantiated during runtime.,It creates a grid layout template automatically.,It defines a new custom web component.,B,HTML,Medium
+Which attribute specifies that an input field must be filled out before submitting the form?,validate,placeholder,required,important,C,HTML,Easy
+"In HTML5, which element is used to specify a footer for a document or section?",<bottom>,<section>,<footer>,<end>,C,HTML,Easy
+What is the correct HTML element for playing video files?,<movie>,<media>,<video>,<play>,C,HTML,Easy
+Which HTML attribute is used to define inline styles?,class,font,styles,style,D,HTML,Easy
+What is the semantic meaning of the <mark> element?,Defines text that has been deleted,Highlights text for reference or relevance,Creates a bookmark link,Bolds the text for visual emphasis only,B,HTML,Medium
+"How do you specify an alternate text for an image, if the image cannot be displayed?",alt,title,src,longdesc,A,HTML,Easy
+Which HTML5 API allows you to store data locally within the user's browser with no expiration time?,SessionStorage,Cookies,LocalStorage,WebSQL,C,HTML,Medium
+Which of the following is NOT a valid HTML5 input type?,color,date,email,ip_address,D,HTML,Medium
+What does the 'defer' attribute do when used in a <script> tag?,It blocks HTML parsing until the script is fully downloaded and executed.,It delays the execution of the script until the HTML parser has finished.,It prevents the script from executing.,It executes the script asynchronously as soon as it is downloaded.,B,HTML,Hard
+"In Tailwind CSS, how do you apply a class only on hover?",onhover:bg-blue-500,hover-bg-blue-500,hover:bg-blue-500,active:bg-blue-500,C,CSS & Tailwind,Easy
+What is the CSS property used to control the space between flex items?,margin,padding,gap,spacing,C,CSS & Tailwind,Medium
+Which of the following CSS selectors targets all <p> elements that are direct children of a <div>?,div p,div > p,div + p,div ~ p,B,CSS & Tailwind,Medium
+"In Tailwind CSS, what does the class 'md:flex' signify?",Apply display: flex only on mobile devices.,Apply display: flex on screens equal to or larger than the 'md' breakpoint.,Apply display: flex on screens smaller than the 'md' breakpoint.,Create a flex container that is medium-sized.,B,CSS & Tailwind,Easy
+What is the default position value of an HTML element in CSS?,relative,fixed,absolute,static,D,CSS & Tailwind,Easy
+Which Tailwind utility is used to center an absolutely positioned element horizontally and vertically?\n`top-1/2 left-1/2 ___`,-translate-x-1/2 -translate-y-1/2,transform-center,margin-auto,flex-center,A,CSS & Tailwind,Hard
+How do you write a CSS variable (custom property)?,$main-color: blue;,@main-color: blue;,--main-color: blue;,var main-color = blue;,C,CSS & Tailwind,Medium
+What is 'z-index' used for in CSS?,Zooming an image,Controlling the vertical stacking order of elements that overlap,Setting the z-axis rotation of a 3D element,Defining the opacity of an element,B,CSS & Tailwind,Easy
+What does the Tailwind class 'w-full' translate to in pure CSS?,width: 100vw;,width: 100%;,width: auto;,width: max-content;,B,CSS & Tailwind,Easy
+"If an element has 'box-sizing: border-box', how is its total width calculated?",Width = content width + padding + border,Width = content width (padding and border are included inside this width),Width = content width + margin,Width = content width + padding + border + margin,B,CSS & Tailwind,Hard
+What is the output of the following code?\n```js\nconsole.log(typeof null);\n```,"""undefined""","""null""","""object""",Throws an error,C,JavaScript,Medium
+"Which keyword is used to declare a block-scoped, re-assignable variable in ES6?",var,let,const,block,B,JavaScript,Easy
+"What is the output of `0 == ""0""` and `0 === ""0""` respectively?","true, true","false, false","true, false","false, true",C,JavaScript,Medium
+How do you create an arrow function in JavaScript?,function = () => {},() => {},=> function() {},function() => {},B,JavaScript,Easy
+What will this code output?\n```js\nconsole.log([] + []);\n```,[],undefined,"""""",NaN,C,JavaScript,Hard
+Which array method creates a new array populated with the results of calling a provided function on every element?,forEach(),map(),filter(),reduce(),B,JavaScript,Easy
+What is a Closure in JavaScript?,A function bundled together with its lexical environment.,A method used to close a database connection.,The end of a code block denoted by `}`.,A way to make variables completely public.,A,JavaScript,Medium
+What does `Promise.all()` do?,Runs all promises sequentially.,Returns a single Promise that resolves when all passed Promises have resolved.,Returns the first Promise that resolves or rejects.,Cancels all running Promises.,B,JavaScript,Medium
+"What will this code output?\n```js\nsetTimeout(() => console.log('A'), 0);\nconsole.log('B');\n```","A, then B","B, then A",Simultaneously,Throws an error,B,JavaScript,Medium
+"What is the result of `1 + ""1"" - 1` in JavaScript?",1,11,10,NaN,C,JavaScript,Hard
+What Hook should be used to perform side effects in a React functional component?,useContext,useState,useEffect,useReducer,C,React,Easy
+What is the Virtual DOM in React?,A direct clone of the actual DOM used for backups.,"A lightweight, in-memory representation of the real DOM.",A separate browser window.,A database structure to store React components.,B,React,Medium
+Why do we need to pass a unique `key` prop when rendering a list of elements in React?,To style the elements individually.,"To help React identify which items have changed, are added, or are removed.",To create an ID attribute in the HTML DOM.,It is required for accessibility purposes.,B,React,Easy
+What will happen if you call `setState` inside the `render` method of a class component (or directly inside the function body of a functional component without a hook)?,The state updates normally.,React ignores the state update.,It triggers an infinite loop of re-renders.,It logs a warning but works.,C,React,Medium
+Consider the code:\n```jsx\n<div onClick={() => console.log('div')}>\n  <button onClick={(e) => { e.stopPropagation(); console.log('btn'); }}>Click</button>\n</div>\n```\nWhat logs when the button is clicked?,"div, btn","btn, div",btn,div,C,React,Hard
+What is Prop Drilling?,A new feature in React 18 for faster rendering.,Passing props deep down the component tree through intermediate components that don't need them.,A tool used to inspect React components.,Connecting React to a database.,B,React,Medium
+Which Hook is best suited for managing complex state objects that involve multiple sub-values?,useState,useMemo,useRef,useReducer,D,React,Medium
+How do you conditionally render a component in JSX if `isLoggedIn` is true?,<if condition={isLoggedIn}><Component /></if>,{ isLoggedIn && <Component /> },<Component v-if={isLoggedIn} />,{ if (isLoggedIn) <Component /> },B,React,Easy
+What is the purpose of `useMemo`?,To memoize a callback function.,To cache the result of an expensive calculation between re-renders.,To persist a mutable value without triggering a re-render.,To remember the previous route.,B,React,Hard
+What is React Context used for?,Routing between pages.,Sharing data across the component tree without passing props manually at every level.,Storing data persistently in the browser's LocalStorage.,Validating prop types.,B,React,Easy
+How do you specify that a parameter is optional in a TypeScript interface?,prop?: type,prop: optional type,prop! type,optional prop: type,A,TypeScript,Easy
+What is the 'any' type in TypeScript?,A type that means the variable must be an array.,A type that disables type checking for that variable.,A strict type that only accepts primitive values.,An alias for the 'unknown' type.,B,TypeScript,Easy
+What is the difference between an 'interface' and a 'type' alias in TypeScript?,They are exactly the same with no differences.,"Interfaces can only be used for classes, types for variables.","Interfaces can be merged (declaration merging), types cannot.","Types are executed at runtime, interfaces are not.",C,TypeScript,Hard
+What does the 'readonly' modifier do?,Prevents a variable from being exported.,Makes a property immutable after initialization.,Makes a class impossible to extend.,Prevents a file from being edited.,B,TypeScript,Medium
+Which syntax is used to define a Generic type in TypeScript?,Array(T),Array<T>,Array[T],Array{T},B,TypeScript,Medium
+What is the return type of a function that does not return any value?,null,undefined,void,empty,C,TypeScript,Easy
+"In TypeScript, what is a Union Type?",A type formed by combining multiple types into one object (e.g. A & B).,A type that can be one of several types (e.g. string | number).,A type that joins two arrays.,A built-in data structure.,B,TypeScript,Medium
+What is a Type Assertion in TypeScript?,Throwing an error when a type is wrong.,Letting the compiler know that you know the type of a variable better than it does (e.g. `value as string`).,A testing library feature to assert expected types.,Automatically inferring a type based on usage.,B,TypeScript,Hard
+What does the 'unknown' type represent?,A type-safe counterpart of 'any' that requires type narrowing before use.,A type representing a missing value.,A type used exclusively for unhandled promise rejections.,"A completely unrestricted type, same as 'any'.",A,TypeScript,Hard
+How do you declare an array of numbers in TypeScript?,numbers: Array[number],numbers: number[],numbers: [number],numbers: List<number>,B,TypeScript,Easy
+"In the Next.js App Router, which file is used to define a UI that is shared across multiple routes?",page.tsx,route.tsx,layout.tsx,template.tsx,C,Next.js,Easy
+What is the primary difference between a Server Component and a Client Component in Next.js?,Client components cannot be styled.,"Server components can use React hooks like useState, Client components cannot.",Server components render on the server and cannot use browser APIs/hooks; Client components run on the client.,Server components use Express.js syntax.,C,Next.js,Medium
+Which directive must be added to the top of a file to opt into client-side rendering in the App Router?,"""use server""","""use client""","""use browser""","""use react""",B,Next.js,Easy
+How do you create a dynamic route segment in the Next.js App Router?,By creating a folder named `:id`,By creating a folder named `[id]`,By creating a file named `dynamic.tsx`,By using the `<DynamicRoute>` component,B,Next.js,Medium
+What is the purpose of the `next/image` component?,To draw SVGs dynamically.,To apply CSS filters to images.,"To provide automatic image optimization, resizing, and lazy loading.",To store images in the database.,C,Next.js,Easy
+What is a Next.js Server Action?,A client-side event listener.,An asynchronous function executed on the server that can be called directly from components.,A Redux action used for state management.,A middleware for routing.,B,Next.js,Hard
+Which file is used to define API routes in the Next.js App Router?,api.tsx,server.ts,route.ts,endpoint.ts,C,Next.js,Medium
+What does `generateStaticParams` do in Next.js App router?,Fetches static files from the public folder.,Generates static paths for dynamic routes at build time (similar to getStaticPaths).,Minifies CSS and JS assets.,Validates form parameters.,B,Next.js,Hard
+Which file is used to handle 404 Not Found errors for a specific route segment?,error.tsx,not-found.tsx,404.tsx,missing.tsx,B,Next.js,Medium
+"In Next.js, what is the 'public' directory used for?",Storing secret API keys.,Serving static assets like images and fonts directly at the root URL.,Defining global CSS files.,Exporting components for public NPM packages.,B,Next.js,Easy
+What is Node.js?,A JavaScript framework for building user interfaces.,A JavaScript runtime built on Chrome's V8 JavaScript engine.,A relational database management system.,A CSS preprocessor.,B,Node.js,Easy
+Which core module is used to create an HTTP server in Node.js?,net,fs,http,server,C,Node.js,Easy
+What is the purpose of the 'fs' module in Node.js?,To style front-end components.,To interact with the file system (read/write files).,To handle file uploads over HTTP.,To format strings.,B,Node.js,Medium
+"In Node.js, what does `__dirname` represent?",The name of the currently executing script file.,The absolute path of the directory containing the currently executing file.,The root directory of the operating system.,The user's home directory.,B,Node.js,Medium
+What is npm?,Node Process Manager,Node Package Manager,New Project Module,Network Protocol Manager,B,Node.js,Easy
+How does Node.js handle concurrency despite being single-threaded?,By creating a new thread for each request natively.,By using an Event Loop and asynchronous I/O operations.,By executing tasks in parallel using the GPU.,It does not handle concurrency.,B,Node.js,Hard
+Which of the following is used to import a module in CommonJS (the traditional Node.js module system)?,import module from 'module',include('module'),require('module'),load('module'),C,Node.js,Easy
+What is the role of `package.json` in a Node.js project?,It stores the source code of the application.,"It stores metadata about the project, including dependencies and scripts.",It configures the database connection.,It is an automated testing script.,B,Node.js,Easy
+Which object is used to emit and listen to custom events in Node.js?,EventDispatcher,EventEmitter,EventTarget,EventHandler,B,Node.js,Medium
+What does `process.env` do in Node.js?,It terminates the Node.js process.,It provides access to user environment variables.,It creates a new isolated environment for execution.,It measures the environmental performance of the app.,B,Node.js,Medium
+What is Express.js?,"A fast, unopinionated, minimalist web framework for Node.js.",A database query language.,A frontend state management library.,A tool for bundling JavaScript files.,A,Express.js,Easy
+"In Express, what are Middleware functions?",Functions that execute database queries exclusively.,"Functions that have access to the request object, response object, and the next middleware function.",Functions used to connect the frontend and backend servers.,Functions that validate HTML forms.,B,Express.js,Medium
+How do you define a route that handles GET requests to the root URL ('/') in Express?,"app.get('/', (req, res) => {})","app.route('GET', '/', (req, res) => {})","server.get('/', (req, res) => {})","express.get('/', (req, res) => {})",A,Express.js,Easy
+What method is used to send a JSON response in Express?,res.sendJson(),res.json(),res.writeJson(),req.json(),B,Express.js,Easy
+How do you extract the parameter 'id' from a URL like `/users/:id` in Express?,req.query.id,req.body.id,req.params.id,req.url.id,C,Express.js,Medium
+Which built-in middleware is used to parse incoming JSON payloads in Express 4.16+?,express.json(),body-parser.json(),express.parseJson(),app.useJson(),A,Express.js,Medium
+What does the `next()` function do in an Express middleware?,Skips to the next request.,Passes control to the next middleware function in the stack.,Ends the response process.,Throws an error to the error handler.,B,Express.js,Hard
+How do you handle 404 errors in an Express app?,By placing a middleware with no route path at the very end of the route definitions.,By overriding the default 404 code in process.env.,By using app.error(404).,Express handles 404 errors automatically with a custom page.,A,Express.js,Hard
+"What is CORS, and why is it used in Express apps?",Cross-Origin Resource Sharing; used to allow restricted resources to be requested from another domain.,Custom Object Request Syntax; used for parsing custom JSON.,Cross-Origin Routing System; used for load balancing.,Core Output Response System; used for caching.,A,Express.js,Medium
+"In Express, what is the role of `app.listen()`?",It listens to user interactions on the frontend.,It binds and listens for connections on the specified host and port.,It watches for file changes and restarts the server.,It listens to database connection events.,B,Express.js,Easy
+What type of database is MongoDB?,Relational Database (SQL),Graph Database,NoSQL Document-oriented Database,Key-Value Store,C,MongoDB,Easy
+"In MongoDB, what is a Collection?",A single row of data.,A group of MongoDB documents (equivalent to an RDBMS table).,A set of user permissions.,A server cluster.,B,MongoDB,Easy
+What data format does MongoDB use to store documents?,XML,BSON (Binary JSON),CSV,YAML,B,MongoDB,Medium
+Which field is automatically generated by MongoDB as a unique identifier for every document?,id,_uid,uuid,_id,D,MongoDB,Easy
+What is Mongoose?,A GUI client for MongoDB.,An Object Data Modeling (ODM) library for MongoDB and Node.js.,A MongoDB hosting service.,A frontend framework.,B,MongoDB,Medium
+Which command retrieves all documents from a collection named 'users'?,db.users.getAll(),db.users.fetch(),db.users.find(),db.users.query(),C,MongoDB,Easy
+How do you update a single document in MongoDB?,db.collection.modifyOne(),db.collection.change(),db.collection.updateOne(),db.collection.setOne(),C,MongoDB,Medium
+What does the MongoDB Aggregation Pipeline do?,It replicates data across multiple servers.,"It provides a framework for data aggregation, allowing transformation and computation of data (like grouping and sorting).",It connects MongoDB to SQL databases.,It compresses the database size.,B,MongoDB,Hard
+"In Mongoose, what is a Schema?",A visual diagram of the database.,"A document that defines the structure, data types, and constraints of documents in a collection.",A backup of the database.,A server configuration file.,B,MongoDB,Medium
+Which operator is used in MongoDB to filter documents where a value is greater than a specified amount?,$more,$gt,$greater,>,B,MongoDB,Hard

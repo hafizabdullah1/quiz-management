@@ -10,6 +10,7 @@ import { Plus, Search, Trash2, Edit2, Upload, FileUp } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { QuestionBankFormModal } from "./question-bank-form-modal"
 import { CsvImportModal } from "./csv-import-modal"
+import { ConfirmModal } from "./confirm-modal"
 
 interface QuestionBankListProps {
   initialQuestions: QuestionBankItem[]
@@ -25,6 +26,9 @@ export function QuestionBankList({ initialQuestions }: QuestionBankListProps) {
   const [isCsvModalOpen, setIsCsvModalOpen] = useState(false)
   const [editingQuestion, setEditingQuestion] = useState<QuestionBankItem | null>(null)
 
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [questionToDelete, setQuestionToDelete] = useState<string | null>(null)
+
   // Extract unique categories for filter
   const categories = Array.from(new Set(questions.map(q => q.category).filter(Boolean))) as string[]
 
@@ -35,14 +39,20 @@ export function QuestionBankList({ initialQuestions }: QuestionBankListProps) {
     return matchesSearch && matchesCategory && matchesDifficulty
   })
 
-  const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this question?")) {
-      try {
-        await deleteBankQuestion(id)
-        setQuestions(questions.filter(q => q.id !== id))
-      } catch (error) {
-        alert("Failed to delete question")
-      }
+  const handleDeleteClick = (id: string) => {
+    setQuestionToDelete(id)
+    setDeleteModalOpen(true)
+  }
+
+  const confirmDelete = async () => {
+    if (!questionToDelete) return
+    try {
+      await deleteBankQuestion(questionToDelete)
+      setQuestions(questions.filter(q => q.id !== questionToDelete))
+      setDeleteModalOpen(false)
+      setQuestionToDelete(null)
+    } catch (error) {
+      alert("Failed to delete question")
     }
   }
 
@@ -170,7 +180,7 @@ export function QuestionBankList({ initialQuestions }: QuestionBankListProps) {
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(question)} className="text-gray-500 hover:text-primary">
                       <Edit2 className="w-4 h-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(question.id!)} className="text-gray-500 hover:text-red-600">
+                    <Button variant="ghost" size="icon" onClick={() => handleDeleteClick(question.id!)} className="text-gray-500 hover:text-red-600">
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
@@ -192,6 +202,19 @@ export function QuestionBankList({ initialQuestions }: QuestionBankListProps) {
         isOpen={isCsvModalOpen}
         onClose={() => setIsCsvModalOpen(false)}
         onSuccess={handleCsvImportSuccess}
+      />
+
+      <ConfirmModal
+        isOpen={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false)
+          setQuestionToDelete(null)
+        }}
+        onConfirm={confirmDelete}
+        title="Delete Question"
+        description="Are you sure you want to delete this question? This action cannot be undone."
+        confirmText="Delete"
+        variant="destructive"
       />
     </div>
   )
