@@ -53,15 +53,16 @@ export function TeacherSidebar({ user }: TeacherSidebarProps) {
       href: "/dashboard/quizzes",
       icon: BookOpen,
       current: pathname.startsWith("/dashboard/quiz") && pathname !== "/dashboard/create-quiz"
+    },
+    {
+      name: "Question Bank",
+      href: "/dashboard/question-bank",
+      icon: FileText,
+      current: pathname === "/dashboard/question-bank"
     }
   ]
 
   const comingSoon = [
-    {
-      name: "Question Bank",
-      icon: FileText,
-      disabled: true
-    },
     {
       name: "Student Management",
       icon: Users,
@@ -95,13 +96,14 @@ export function TeacherSidebar({ user }: TeacherSidebarProps) {
 
       {/* Sidebar */}
       <div className={cn(
-        "fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
+        "fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto",
         isOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="flex items-center justify-center px-6 py-6 border-b border-gray-200">
-            <img src="/visionx-logo.png" alt="VisionX Skills" className="h-10 object-contain" />
+          <div className="flex flex-col items-center justify-center px-6 py-6 border-b border-gray-200">
+            <img src="/visionx-logo.png" alt="VisionX Skills" className="h-16 object-contain" />
+            <span className="mt-2 text-xs font-bold text-primary uppercase tracking-widest bg-primary/10 px-2 py-1 rounded-md">Quiz Portal</span>
           </div>
 
           {/* User Info */}

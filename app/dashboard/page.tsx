@@ -49,10 +49,10 @@ export default async function DashboardPage() {
     })) || []
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-purple-50 flex">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-primary/5 flex">
         <TeacherSidebar user={user} />
 
-      <main className="min-h-screen">
+      <main className="flex-1 min-w-0">
       <TeacherNav user={user} />
         <div className="px-4 sm:px-6 lg:px-8 py-8">
           {/* Header */}
@@ -88,13 +88,15 @@ export default async function DashboardPage() {
                 </div>
               </Link>
 
-              <div className="h-24 bg-gray-50 border-2 border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center opacity-60 cursor-not-allowed">
-                <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mb-2">
-                  <FileText className="w-5 h-5 text-gray-500" />
+              <Link href="/dashboard/question-bank" className="group">
+                <div className="h-24 bg-white border-2 border-primary/20 rounded-xl p-4 flex flex-col items-center justify-center hover:border-primary/40 hover:bg-primary/5 transition-all cursor-pointer shadow-sm hover:shadow-md">
+                  <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                    <FileText className="w-5 h-5 text-white" />
+                  </div>
+                  <span className="font-semibold text-gray-900 text-sm">Question Bank</span>
+                  <span className="text-xs text-gray-500">Manage questions</span>
                 </div>
-                <span className="font-semibold text-gray-500 text-sm">Question Bank</span>
-                <span className="text-xs text-gray-400">Coming Soon</span>
-              </div>
+              </Link>
 
               <div className="h-24 bg-gray-50 border-2 border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center opacity-60 cursor-not-allowed">
                 <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mb-2">
