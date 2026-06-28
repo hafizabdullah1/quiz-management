@@ -267,9 +267,9 @@ export default function QuizPage() {
 
   if (state === "loading") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-primary/5 to-primary/10 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-700 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading quiz...</p>
         </div>
       </div>
@@ -278,7 +278,7 @@ export default function QuizPage() {
 
   if (state === "not-found") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-primary/5 to-primary/10 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Quiz Not Found</h1>
           <p className="text-gray-600">The quiz you're looking for doesn't exist or is no longer active.</p>
@@ -289,7 +289,7 @@ export default function QuizPage() {
 
   if (state === "already-taken") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-violet-50 to-purple-50 flex items-center justify-center p-4">
         <div className="max-w-2xl w-full">
           <div className="bg-white/90 backdrop-blur-sm border-0 shadow-2xl rounded-2xl p-8 text-center">
             <div className="w-20 h-20 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
@@ -331,7 +331,7 @@ export default function QuizPage() {
   if (state === "taking" && quiz) {
     if (!quiz.questions || quiz.questions.length === 0) {
       return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="min-h-screen bg-gradient-to-br from-primary/5 to-primary/10 flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">No Questions Found</h1>
             <p className="text-gray-600">This quiz has no questions available.</p>
@@ -342,7 +342,7 @@ export default function QuizPage() {
 
     if (currentQuestionIndex >= quiz.questions.length) {
       return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="min-h-screen bg-gradient-to-br from-primary/5 to-primary/10 flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Quiz Error</h1>
             <p className="text-gray-600">Question index is out of range.</p>

@@ -18,7 +18,7 @@ export default async function QuestionBankPage() {
   const initialQuestions = await getBankQuestions()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-purple-50 flex">
       <TeacherSidebar user={user} />
 
       <main className="flex-1 min-h-screen overflow-hidden flex flex-col">
@@ -28,7 +28,7 @@ export default async function QuestionBankPage() {
           <div className="max-w-6xl mx-auto space-y-8">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0">
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
                   Question Bank
                 </h1>
                 <p className="text-gray-600 mt-1">Manage and organize your reusable questions.</p>

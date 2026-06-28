@@ -69,7 +69,7 @@ export function QuestionForm({ question, index, onUpdate, onDelete, canDelete }:
             size="sm"
             onClick={handleSaveToBank}
             disabled={savingToBank || savedToBank}
-            className={savedToBank ? "text-green-600 border-green-200 bg-green-50" : "text-blue-600 border-blue-200 hover:bg-blue-50"}
+            className={savedToBank ? "text-green-600 border-green-200 bg-green-50" : "text-primary border-primary/20 hover:bg-primary/5"}
             title="Save to Question Bank"
           >
             {savingToBank ? <Loader2 className="w-4 h-4 animate-spin" /> : savedToBank ? <Check className="w-4 h-4" /> : <Save className="w-4 h-4" />}

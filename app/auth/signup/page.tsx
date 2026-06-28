@@ -48,7 +48,7 @@ export default function SignUpPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/10 p-4">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold text-green-700">Check Your Email</CardTitle>
@@ -67,11 +67,12 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/10 p-4">
       <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-blue-900">Quiz Master</CardTitle>
-          <CardDescription>Create your teacher account</CardDescription>
+        <CardHeader className="text-center flex flex-col items-center">
+          <img src="/visionx-logo.png" alt="VisionX Skills" className="h-12 mb-2 object-contain" />
+          <CardTitle className="text-2xl font-bold text-primary">VisionX Quiz Portal</CardTitle>
+          <CardDescription>Create your account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignUp} className="space-y-4">
@@ -118,14 +119,14 @@ export default function SignUpPage() {
               />
             </div>
 
-            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={loading}>
+            <Button type="submit" className="w-full bg-primary hover:bg-primary-hover" disabled={loading}>
               {loading ? "Creating account..." : "Create Account"}
             </Button>
           </form>
 
           <div className="mt-4 text-center text-sm">
             <span className="text-muted-foreground">Already have an account? </span>
-            <Link href="/auth/login" className="text-blue-600 hover:underline">
+            <Link href="/auth/login" className="text-primary hover:underline">
               Sign in
             </Link>
           </div>

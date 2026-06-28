@@ -49,7 +49,7 @@ export default async function DashboardPage() {
     })) || []
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-purple-50 flex">
         <TeacherSidebar user={user} />
 
       <main className="min-h-screen">
@@ -58,12 +58,12 @@ export default async function DashboardPage() {
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 space-y-4 sm:space-y-0">
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
                 Dashboard
               </h1>
               <p className="text-gray-600 mt-1">Manage your quizzes and track student progress</p>
             </div>
-            <Button asChild className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg">
+            <Button asChild className="bg-gradient-primary hover:bg-gradient-primary-hover shadow-lg">
               <Link href="/dashboard/create-quiz">
                 <Plus className="w-4 h-4 mr-2" />
                 Create Quiz
@@ -79,8 +79,8 @@ export default async function DashboardPage() {
             <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <Link href="/dashboard/create-quiz" className="group">
-                <div className="h-24 bg-white border-2 border-blue-200 rounded-xl p-4 flex flex-col items-center justify-center hover:border-blue-400 hover:bg-blue-50 transition-all cursor-pointer shadow-sm hover:shadow-md">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                <div className="h-24 bg-white border-2 border-primary/20 rounded-xl p-4 flex flex-col items-center justify-center hover:border-primary/40 hover:bg-primary/5 transition-all cursor-pointer shadow-sm hover:shadow-md">
+                  <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                     <Plus className="w-5 h-5 text-white" />
                   </div>
                   <span className="font-semibold text-gray-900 text-sm">Create New Quiz</span>
@@ -131,12 +131,12 @@ export default async function DashboardPage() {
 
             {quizzesForDisplay.length === 0 ? (
               <div className="text-center py-16">
-                <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <BookOpen className="w-10 h-10 text-blue-600" />
+                <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-violet-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <BookOpen className="w-10 h-10 text-primary" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">No quizzes yet</h3>
                 <p className="text-gray-600 mb-6 max-w-md mx-auto">Get started by creating your first quiz and begin engaging with your students</p>
-                <Button asChild className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg">
+                <Button asChild className="bg-gradient-primary hover:bg-gradient-primary-hover shadow-lg">
                   <Link href="/dashboard/create-quiz">
                     <Plus className="w-4 h-4 mr-2" />
                     Create Your First Quiz

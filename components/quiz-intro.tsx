@@ -42,15 +42,15 @@ export function QuizIntro({ quiz, onStart, isStarting }: QuizIntroProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-violet-50 to-purple-50 flex items-center justify-center p-4">
       <div className="max-w-3xl w-full space-y-8">
         {/* Quiz Header */}
         <Card className="border-0 shadow-2xl bg-white/80 backdrop-blur-sm">
           <CardHeader className="text-center pb-6">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
               <FileText className="w-8 h-8 text-white" />
             </div>
-            <CardTitle className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            <CardTitle className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
               {quiz.title}
             </CardTitle>
             {quiz.description && (
@@ -61,12 +61,12 @@ export function QuizIntro({ quiz, onStart, isStarting }: QuizIntroProps) {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-              <div className="flex flex-col items-center space-y-2 p-4 bg-blue-50 rounded-xl">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <FileText className="w-6 h-6 text-blue-600" />
+              <div className="flex flex-col items-center space-y-2 p-4 bg-primary/5 rounded-xl">
+                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                  <FileText className="w-6 h-6 text-primary" />
                 </div>
-                <span className="text-lg font-semibold text-blue-900">{quiz.question_count}</span>
-                <span className="text-sm text-blue-700">Questions</span>
+                <span className="text-lg font-semibold text-primary">{quiz.question_count}</span>
+                <span className="text-sm text-primary">Questions</span>
               </div>
               <div className="flex flex-col items-center space-y-2 p-4 bg-green-50 rounded-xl">
                 <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -75,12 +75,12 @@ export function QuizIntro({ quiz, onStart, isStarting }: QuizIntroProps) {
                 <span className="text-lg font-semibold text-green-900">No Limit</span>
                 <span className="text-sm text-green-700">Time Limit</span>
               </div>
-              <div className="flex flex-col items-center space-y-2 p-4 bg-purple-50 rounded-xl">
-                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                  <Users className="w-6 h-6 text-purple-600" />
+              <div className="flex flex-col items-center space-y-2 p-4 bg-primary/5 rounded-xl">
+                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                  <Users className="w-6 h-6 text-primary" />
                 </div>
-                <span className="text-lg font-semibold text-purple-900">Multiple</span>
-                <span className="text-sm text-purple-700">Choice</span>
+                <span className="text-lg font-semibold text-primary">Multiple</span>
+                <span className="text-sm text-primary">Choice</span>
               </div>
             </div>
           </CardContent>
@@ -102,11 +102,11 @@ export function QuizIntro({ quiz, onStart, isStarting }: QuizIntroProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <ul className="space-y-3 text-sm text-gray-700">
                 <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-primary/50 rounded-full mt-2 flex-shrink-0"></div>
                   <span>You can only attempt this quiz once</span>
                 </li>
                 <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-primary/50 rounded-full mt-2 flex-shrink-0"></div>
                   <span>Each question has 4 options, select the correct answer</span>
                 </li>
               </ul>
@@ -117,7 +117,7 @@ export function QuizIntro({ quiz, onStart, isStarting }: QuizIntroProps) {
                 </li>
                 <li className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span className="font-semibold text-blue-600">Your progress is automatically saved</span>
+                  <span className="font-semibold text-primary">Your progress is automatically saved</span>
                 </li>
               </ul>
             </div>
@@ -147,7 +147,7 @@ export function QuizIntro({ quiz, onStart, isStarting }: QuizIntroProps) {
                 value={studentName}
                 onChange={(e) => setStudentName(e.target.value)}
                 placeholder="Enter your full name"
-                className="h-12 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                className="h-12 text-base border-gray-300 focus:border-purple-500 focus:ring-purple-500"
               />
             </div>
 
@@ -161,14 +161,14 @@ export function QuizIntro({ quiz, onStart, isStarting }: QuizIntroProps) {
                 value={studentEmail}
                 onChange={(e) => setStudentEmail(e.target.value)}
                 placeholder="Enter your email address"
-                className="h-12 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                className="h-12 text-base border-gray-300 focus:border-purple-500 focus:ring-purple-500"
               />
             </div>
 
             <Button 
               onClick={handleStart}
               disabled={isStarting}
-              className="w-full h-14 cursor-pointer text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full h-14 cursor-pointer text-lg font-semibold bg-gradient-primary hover:bg-gradient-primary-hover shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isStarting ? "Starting..." : "🚀 Start Quiz Now"}
             </Button>

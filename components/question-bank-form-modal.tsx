@@ -165,7 +165,7 @@ export function QuestionBankFormModal({ isOpen, onClose, editingQuestion, onSucc
             <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
               Cancel
             </Button>
-            <Button type="submit" className="bg-blue-600 hover:bg-blue-700" disabled={loading}>
+            <Button type="submit" className="bg-primary hover:bg-primary-hover" disabled={loading}>
               {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
               {editingQuestion ? "Update Question" : "Save Question"}
             </Button>

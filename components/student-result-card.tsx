@@ -96,7 +96,7 @@ export function StudentResultCard({ attempt, quizId }: StudentResultCardProps) {
             <Eye className="w-4 h-4 mr-1" />
             View Details
           </Button>
-          <Button size="sm" onClick={handleDownloadPDF} className="flex-1 bg-blue-600 hover:bg-blue-700">
+          <Button size="sm" onClick={handleDownloadPDF} className="flex-1 bg-primary hover:bg-primary-hover">
             <Download className="w-4 h-4 mr-1" />
             Download PDF
           </Button>

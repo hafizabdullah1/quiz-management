@@ -12,7 +12,7 @@ export function DashboardStats({ totalQuizzes, totalAttempts, averageScore }: Da
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-shadow">
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
+            <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center">
               <BookOpen className="w-6 h-6 text-white" />
             </div>
             <div className="ml-4">

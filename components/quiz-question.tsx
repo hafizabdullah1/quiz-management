@@ -79,13 +79,13 @@ export function QuizQuestion({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-violet-50 to-purple-50 flex items-center justify-center p-4">
       <div className="max-w-4xl w-full">
         <Card className="border-0 shadow-2xl bg-white/90 backdrop-blur-sm">
           <CardHeader className="pb-6">
             <div className="flex justify-between items-center mb-6">
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
+                <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center">
                   <span className="text-white font-bold text-lg">{currentIndex + 1}</span>
                 </div>
                 <div>
@@ -98,14 +98,14 @@ export function QuizQuestion({
               <div className="text-right">
                 <div className="flex items-center justify-end space-x-2 mb-1">
                   <Clock className={`w-4 h-4 ${timeLeft <= 10 ? "text-red-500 animate-pulse" : "text-gray-600"}`} />
-                  <span className={`font-mono font-bold ${timeLeft <= 10 ? "text-red-600" : "text-blue-600"}`}>
+                  <span className={`font-mono font-bold ${timeLeft <= 10 ? "text-red-600" : "text-primary"}`}>
                     {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
                   </span>
                 </div>
                 <div className="w-32 bg-gray-200 rounded-full h-2 mt-1">
                   <div
                     className={`h-2 rounded-full transition-all duration-1000 linear ${
-                      timeLeft <= 10 ? "bg-red-500" : "bg-gradient-to-r from-blue-500 to-indigo-600"
+                      timeLeft <= 10 ? "bg-red-500" : "bg-gradient-to-r from-purple-500 to-violet-600"
                     }`}
                     style={{ width: `${(timeLeft / timeLimit) * 100}%` }}
                   ></div>
@@ -119,11 +119,11 @@ export function QuizQuestion({
           </CardHeader>
           <CardContent className="space-y-8">
             {!hasAnswered && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center space-x-3">
-                <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+              <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 flex items-center space-x-3">
+                <div className="w-6 h-6 bg-primary/50 rounded-full flex items-center justify-center">
                   <span className="text-white text-sm">ℹ</span>
                 </div>
-                <span className="text-blue-800 font-medium">Please select an answer to continue</span>
+                <span className="text-primary font-medium">Please select an answer to continue</span>
               </div>
             )}
 
@@ -143,10 +143,10 @@ export function QuizQuestion({
                         key={option}
                         className={`flex items-center space-x-4 p-4 rounded-xl border-2 transition-all duration-200 ${
                         selectedAnswer === option
-                            ? "border-blue-500 bg-blue-50"
+                            ? "border-purple-500 bg-primary/5"
                             : hasAnswered
                             ? "border-gray-200 bg-gray-50 opacity-60"
-                            : "border-gray-200 hover:border-blue-300 hover:bg-blue-50 cursor-pointer"
+                            : "border-gray-200 hover:border-blue-300 hover:bg-primary/5 cursor-pointer"
                         }`}
                     >
                     <RadioGroupItem
@@ -184,7 +184,7 @@ export function QuizQuestion({
                   <Button
                     onClick={onNext}
                     disabled={!canGoNext}
-                    className="bg-gradient-to-r cursor-pointer from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                    className="bg-gradient-to-r cursor-pointer from-purple-700 to-violet-600 hover:bg-gradient-primary-hover text-white px-6 py-3 text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                   >
                     Next
                     <ChevronRight className="w-5 h-5 ml-2" />

@@ -40,11 +40,12 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/10 p-4">
       <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-blue-900">Quiz Master</CardTitle>
-          <CardDescription>Sign in to your teacher account</CardDescription>
+        <CardHeader className="text-center flex flex-col items-center">
+          <img src="/visionx-logo.png" alt="VisionX Skills" className="h-12 mb-2 object-contain" />
+          <CardTitle className="text-2xl font-bold text-primary">VisionX Quiz Portal</CardTitle>
+          <CardDescription>Sign in to your account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
@@ -78,14 +79,14 @@ export default function LoginPage() {
               />
             </div>
 
-            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={loading}>
+            <Button type="submit" className="w-full bg-primary hover:bg-primary-hover" disabled={loading}>
               {loading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
 
           <div className="mt-4 text-center text-sm">
             <span className="text-muted-foreground">Don't have an account? </span>
-            <Link href="/auth/signup" className="text-blue-600 hover:underline">
+            <Link href="/auth/signup" className="text-primary hover:underline">
               Sign up
             </Link>
           </div>

@@ -18,7 +18,7 @@ export function QuizComplete({ quiz, studentName, score, totalQuestions, isTermi
   const percentage = score !== undefined && totalQuestions ? Math.round((score / totalQuestions) * 100) : 0
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-violet-50 to-purple-50 flex items-center justify-center p-4">
       <div className="max-w-3xl w-full">
         <Card className="border-0 shadow-2xl bg-white/90 backdrop-blur-sm">
           <CardHeader className="text-center pb-6">
@@ -57,8 +57,8 @@ export function QuizComplete({ quiz, studentName, score, totalQuestions, isTermi
             </div>
 
             {/* Teacher review notice */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 text-center border-2 border-blue-200">
-              <p className="text-blue-800 font-medium">
+            <div className="bg-gradient-to-br from-purple-50 to-violet-50 rounded-2xl p-8 text-center border-2 border-primary/20">
+              <p className="text-primary font-medium">
                 Your teacher will review your responses and share your result.
               </p>
             </div>

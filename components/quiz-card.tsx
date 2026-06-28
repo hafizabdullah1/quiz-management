@@ -25,7 +25,7 @@ export function QuizCard({ quiz }: QuizCardProps) {
       <CardHeader className="pb-4">
         <div className="flex justify-between items-start">
           <div className="flex-1">
-            <CardTitle className="text-lg font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">
+            <CardTitle className="text-lg font-semibold text-gray-900 group-hover:text-primary transition-colors">
               {quiz.title}
             </CardTitle>
             <CardDescription className="mt-2 text-gray-600 line-clamp-2">
@@ -48,7 +48,7 @@ export function QuizCard({ quiz }: QuizCardProps) {
         {/* Stats Grid */}
         <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
           <div className="text-center">
-            <div className="text-2xl font-bold text-blue-600">{quiz.question_count}</div>
+            <div className="text-2xl font-bold text-primary">{quiz.question_count}</div>
             <div className="text-xs text-gray-500">Questions</div>
           </div>
           <div className="text-center">
@@ -56,7 +56,7 @@ export function QuizCard({ quiz }: QuizCardProps) {
             <div className="text-xs text-gray-500">Attempts</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-purple-600">
+            <div className="text-2xl font-bold text-primary">
               {new Date(quiz.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
             </div>
             <div className="text-xs text-gray-500">Created</div>
@@ -65,7 +65,7 @@ export function QuizCard({ quiz }: QuizCardProps) {
 
         {/* Action Buttons */}
         <div className="flex flex-wrap gap-2">
-          <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white" asChild>
+          <Button size="sm" className="bg-primary hover:bg-primary-hover text-white" asChild>
             <Link href={`/dashboard/quiz/${quiz.id}`}>
               <Eye className="w-4 h-4 mr-1" />
               View

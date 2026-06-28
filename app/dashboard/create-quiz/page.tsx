@@ -263,7 +263,7 @@ export default function CreateQuizPage() {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-gray-900">Questions</h2>
               <div className="flex gap-2">
-                <Button type="button" onClick={() => setIsBankModalOpen(true)} variant="outline" className="text-blue-600 border-blue-200 hover:bg-blue-50">
+                <Button type="button" onClick={() => setIsBankModalOpen(true)} variant="outline" className="text-primary border-primary/20 hover:bg-primary/5">
                   <Download className="w-4 h-4 mr-2" />
                   Import from Bank
                 </Button>
@@ -291,7 +291,7 @@ export default function CreateQuizPage() {
             <Button type="button" variant="outline" asChild>
               <Link href="/dashboard">Cancel</Link>
             </Button>
-            <Button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-700">
+            <Button type="submit" disabled={loading} className="bg-primary hover:bg-primary-hover">
               {loading ? (
                 "Creating Quiz..."
               ) : (

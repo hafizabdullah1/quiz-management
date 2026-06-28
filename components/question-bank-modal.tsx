@@ -117,7 +117,7 @@ export function QuestionBankModal({ isOpen, onClose, onImport }: QuestionBankMod
           <div className="flex-1 overflow-y-auto border rounded-md">
             {loading ? (
               <div className="flex justify-center items-center h-32">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
               </div>
             ) : filteredQuestions.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
@@ -128,7 +128,7 @@ export function QuestionBankModal({ isOpen, onClose, onImport }: QuestionBankMod
                 {filteredQuestions.map((q) => (
                   <div 
                     key={q.id} 
-                    className={`flex items-start p-4 hover:bg-gray-50 transition-colors cursor-pointer ${selectedIds.has(q.id!) ? 'bg-blue-50/50' : ''}`}
+                    className={`flex items-start p-4 hover:bg-gray-50 transition-colors cursor-pointer ${selectedIds.has(q.id!) ? 'bg-primary/5/50' : ''}`}
                     onClick={() => toggleSelection(q.id!)}
                   >
                     <Checkbox 
@@ -155,7 +155,7 @@ export function QuestionBankModal({ isOpen, onClose, onImport }: QuestionBankMod
             {selectedIds.size} question{selectedIds.size !== 1 ? 's' : ''} selected
           </div>
           <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleImport} disabled={selectedIds.size === 0} className="bg-blue-600 hover:bg-blue-700">
+          <Button onClick={handleImport} disabled={selectedIds.size === 0} className="bg-primary hover:bg-primary-hover">
             Import Selected
           </Button>
         </DialogFooter>

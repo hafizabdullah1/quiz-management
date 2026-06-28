@@ -40,7 +40,7 @@ export function ShareButton({ url }: ShareButtonProps) {
       size="sm"
       variant="outline"
       onClick={copyShareLink}
-      className="cursor-pointer hover:bg-purple-50 hover:border-purple-300 hover:text-purple-700 transition-all duration-200"
+      className="cursor-pointer hover:bg-primary/5 hover:border-primary/30 hover:text-primary transition-all duration-200"
     >
       {copied ? (
         <>

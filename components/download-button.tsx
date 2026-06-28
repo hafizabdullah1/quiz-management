@@ -16,7 +16,7 @@ export function DownloadButton({ quizId, attemptId }: DownloadButtonProps) {
   return (
     <Button
       onClick={handleDownload}
-      className="bg-blue-600 hover:bg-blue-700"
+      className="bg-primary hover:bg-primary-hover"
     >
       <Download className="w-4 h-4 mr-2" />
       Download PDF

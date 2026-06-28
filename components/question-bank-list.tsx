@@ -111,7 +111,7 @@ export function QuestionBankList({ initialQuestions }: QuestionBankListProps) {
             <FileUp className="w-4 h-4 mr-2" />
             Import CSV
           </Button>
-          <Button onClick={() => { setEditingQuestion(null); setIsFormModalOpen(true) }} className="bg-blue-600 hover:bg-blue-700">
+          <Button onClick={() => { setEditingQuestion(null); setIsFormModalOpen(true) }} className="bg-primary hover:bg-primary-hover">
             <Plus className="w-4 h-4 mr-2" />
             Add Question
           </Button>
@@ -136,7 +136,7 @@ export function QuestionBankList({ initialQuestions }: QuestionBankListProps) {
                   <div className="flex-1">
                     <div className="flex gap-2 mb-2">
                       {question.category && (
-                        <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-100">
+                        <Badge variant="secondary" className="bg-primary/5 text-primary border-purple-100">
                           {question.category}
                         </Badge>
                       )}
@@ -167,7 +167,7 @@ export function QuestionBankList({ initialQuestions }: QuestionBankListProps) {
                   </div>
                   
                   <div className="flex flex-col gap-2">
-                    <Button variant="ghost" size="icon" onClick={() => handleEdit(question)} className="text-gray-500 hover:text-blue-600">
+                    <Button variant="ghost" size="icon" onClick={() => handleEdit(question)} className="text-gray-500 hover:text-primary">
                       <Edit2 className="w-4 h-4" />
                     </Button>
                     <Button variant="ghost" size="icon" onClick={() => handleDelete(question.id!)} className="text-gray-500 hover:text-red-600">

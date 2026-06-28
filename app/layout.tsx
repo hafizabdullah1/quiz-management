@@ -8,8 +8,8 @@ import { Suspense } from "react"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "Quiz Management App",
-  description: "Created with Next.js and Supabase",
+  title: "VisionX Skills Assessment",
+  description: "VisionX internal testing and skill assessment platform.",
   generator: "Next.js and Supabase",
 }
 

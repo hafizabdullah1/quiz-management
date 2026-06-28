@@ -120,7 +120,7 @@ export function CsvImportModal({ isOpen, onClose, onSuccess }: CsvImportModalPro
         </DialogHeader>
         
         <div className="space-y-4 py-4">
-          <div className="bg-blue-50 text-blue-800 text-sm p-3 rounded-md mb-4 border border-blue-100">
+          <div className="bg-primary/5 text-primary text-sm p-3 rounded-md mb-4 border border-purple-100">
             <strong>Required CSV Columns:</strong>
             <ul className="list-disc ml-5 mt-1 opacity-90 text-xs">
               <li>question_text</li>
@@ -135,7 +135,7 @@ export function CsvImportModal({ isOpen, onClose, onSuccess }: CsvImportModalPro
           </div>
 
           <div 
-            className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors ${file ? 'border-blue-400 bg-blue-50' : 'border-gray-200 hover:border-blue-400 hover:bg-gray-50'}`}
+            className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors ${file ? 'border-primary/40 bg-primary/5' : 'border-gray-200 hover:border-primary/40 hover:bg-gray-50'}`}
           >
             <input 
               type="file" 
@@ -147,7 +147,7 @@ export function CsvImportModal({ isOpen, onClose, onSuccess }: CsvImportModalPro
             
             {!file ? (
               <div className="flex flex-col items-center cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-                <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-3">
+                <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-3">
                   <UploadCloud className="w-6 h-6" />
                 </div>
                 <p className="text-sm font-medium text-gray-900">Click to upload CSV file</p>
@@ -188,7 +188,7 @@ export function CsvImportModal({ isOpen, onClose, onSuccess }: CsvImportModalPro
           </Button>
           <Button 
             onClick={handleImport} 
-            className="bg-blue-600 hover:bg-blue-700" 
+            className="bg-primary hover:bg-primary-hover" 
             disabled={!file || loading || successCount > 0}
           >
             {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}

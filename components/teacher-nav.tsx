@@ -62,7 +62,7 @@ export function TeacherNav({ user }: TeacherNavProps) {
               <Button variant="ghost" className="relative h-9 w-9 rounded-full p-0 hover:bg-gray-100">
                 <Avatar className="h-9 w-9">
                   <AvatarImage src="/placeholder.svg" alt={fullName} />
-                  <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white text-sm font-semibold">
+                  <AvatarFallback className="bg-gradient-primary text-white text-sm font-semibold">
                     {initials}
                   </AvatarFallback>
                 </Avatar>
