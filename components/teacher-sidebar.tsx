@@ -174,7 +174,7 @@ export function TeacherSidebar({ user }: TeacherSidebarProps) {
           <div className="px-4 py-4 border-t border-gray-200">
             <div className="flex items-center space-x-3 text-sm text-gray-500">
               <TrendingUp className="h-4 w-4" />
-              <span>Version 1.0 MVP</span>
+              <span>Quiz Portal</span>
             </div>
           </div>
         </div>
