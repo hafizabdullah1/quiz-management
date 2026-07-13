@@ -54,19 +54,22 @@ export async function POST(
       studentAnswersToInsert.push({
         attempt_id: attemptId,
         question_id: question.id,
-        selected_answer: studentAnswer,
+        selected_answer: studentAnswer === "" ? null : studentAnswer,
         is_correct: isCorrect,
       })
     }
 
     // 3. Save student answers
+    // Delete any existing answers for this attempt to prevent unique constraint errors on retry
+    await supabase.from("student_answers").delete().eq("attempt_id", attemptId)
+
     const { error: answersError } = await supabase
       .from("student_answers")
       .insert(studentAnswersToInsert)
 
     if (answersError) {
       console.error("Error saving answers:", answersError)
-      return NextResponse.json({ error: "Failed to save answers" }, { status: 500 })
+      return NextResponse.json({ error: "Failed to save answers", details: answersError.message }, { status: 500 })
     }
 
     // 4. Update the attempt with the final score
@@ -90,7 +93,7 @@ export async function POST(
 
     if (attemptError) {
       console.error("Error updating attempt:", attemptError)
-      return NextResponse.json({ error: "Failed to update attempt" }, { status: 500 })
+      return NextResponse.json({ error: "Failed to update attempt", details: attemptError.message }, { status: 500 })
     }
 
     return NextResponse.json({ 
