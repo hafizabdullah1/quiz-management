@@ -30,6 +30,18 @@ export async function POST(
     }
 
     // 2. Evaluate answers and prepare insertion data
+    // First, verify the attempt still exists (handles stale local storage)
+    const { data: attempt, error: attemptCheckError } = await supabase
+      .from("quiz_attempts")
+      .select("id")
+      .eq("id", attemptId)
+      .single()
+
+    if (attemptCheckError || !attempt) {
+      console.error("Attempt not found:", attemptId)
+      return NextResponse.json({ error: "Attempt not found or invalid" }, { status: 404 })
+    }
+
     let correctAnswersCount = 0
     const studentAnswersToInsert = []
 

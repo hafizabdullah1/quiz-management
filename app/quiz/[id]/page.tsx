@@ -243,6 +243,14 @@ export default function QuizPage() {
         })
       })
 
+      if (response.status === 404) {
+        localStorage.removeItem(`quiz_attempt_${quizId}`)
+        localStorage.removeItem(`quiz_progress_${quizId}`)
+        alert("Your quiz session was invalid or expired. The page will reload so you can start again.")
+        window.location.reload()
+        return
+      }
+
       if (!response.ok) throw new Error("Failed to submit answers")
       const result = await response.json()
       

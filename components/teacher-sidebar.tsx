@@ -50,7 +50,7 @@ export function TeacherSidebar({ user }: TeacherSidebarProps) {
     },
     {
       name: "All Quizzes",
-      href: "/dashboard/quizzes",
+      href: "/dashboard/quiz",
       icon: BookOpen,
       current: pathname.startsWith("/dashboard/quiz") && pathname !== "/dashboard/create-quiz"
     },
