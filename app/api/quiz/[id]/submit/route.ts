@@ -54,7 +54,7 @@ export async function POST(
       studentAnswersToInsert.push({
         attempt_id: attemptId,
         question_id: question.id,
-        selected_answer: studentAnswer === "" ? null : studentAnswer,
+        selected_answer: studentAnswer,
         is_correct: isCorrect,
       })
     }
