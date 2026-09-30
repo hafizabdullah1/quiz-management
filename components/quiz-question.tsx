@@ -29,7 +29,7 @@ interface QuizQuestionProps {
   isLastQuestion: boolean
   hasAnswered: boolean
   isSubmitting: boolean
-  timeLimit: number
+  timeLimit: number | null
 }
 
 export function QuizQuestion({
@@ -56,19 +56,19 @@ export function QuizQuestion({
 
   // Timer logic
   useEffect(() => {
-    if (hasAnswered || isSubmitting) return
+    if (hasAnswered || isSubmitting || timeLimit === null) return
 
-    if (timeLeft <= 0) {
+    if (timeLeft !== null && timeLeft <= 0) {
       handleTimeout()
       return
     }
 
     const timer = setInterval(() => {
-      setTimeLeft((prev) => prev - 1)
+      setTimeLeft((prev) => (prev !== null ? prev - 1 : null))
     }, 1000)
 
     return () => clearInterval(timer)
-  }, [timeLeft, hasAnswered, isSubmitting])
+  }, [timeLeft, hasAnswered, isSubmitting, timeLimit])
 
   const handleTimeout = () => {
     if (isLastQuestion) {
@@ -95,22 +95,24 @@ export function QuizQuestion({
                   <div className="text-sm text-gray-600">Progress: {Math.round(progress)}% Complete</div>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="flex items-center justify-end space-x-2 mb-1">
-                  <Clock className={`w-4 h-4 ${timeLeft <= 10 ? "text-red-500 animate-pulse" : "text-gray-600"}`} />
-                  <span className={`font-mono font-bold ${timeLeft <= 10 ? "text-red-600" : "text-primary"}`}>
-                    {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
-                  </span>
+              {timeLimit !== null && (
+                <div className="text-right">
+                  <div className="flex items-center justify-end space-x-2 mb-1">
+                    <Clock className={`w-4 h-4 ${timeLeft !== null && timeLeft <= 10 ? "text-red-500 animate-pulse" : "text-gray-600"}`} />
+                    <span className={`font-mono font-bold ${timeLeft !== null && timeLeft <= 10 ? "text-red-600" : "text-primary"}`}>
+                      {timeLeft !== null && `${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, '0')}`}
+                    </span>
+                  </div>
+                  <div className="w-32 bg-gray-200 rounded-full h-2 mt-1">
+                    <div
+                      className={`h-2 rounded-full transition-all duration-1000 linear ${
+                        timeLeft !== null && timeLeft <= 10 ? "bg-red-500" : "bg-gradient-to-r from-purple-500 to-violet-600"
+                      }`}
+                      style={{ width: `${(timeLeft !== null && timeLimit ? (timeLeft / timeLimit) * 100 : 100)}%` }}
+                    ></div>
+                  </div>
                 </div>
-                <div className="w-32 bg-gray-200 rounded-full h-2 mt-1">
-                  <div
-                    className={`h-2 rounded-full transition-all duration-1000 linear ${
-                      timeLeft <= 10 ? "bg-red-500" : "bg-gradient-to-r from-purple-500 to-violet-600"
-                    }`}
-                    style={{ width: `${(timeLeft / timeLimit) * 100}%` }}
-                  ></div>
-                </div>
-              </div>
+              )}
             </div>
             <Progress value={progress} className="mb-6 h-3" />
             <CardTitle className="text-2xl font-bold text-gray-900 leading-relaxed">

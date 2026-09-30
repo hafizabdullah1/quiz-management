@@ -30,7 +30,9 @@ interface Quiz {
   title: string
   description: string | null
   is_active: boolean
-  time_per_question: number
+  timer_type: "none" | "per_question" | "total_time"
+  time_per_question: number | null
+  total_time_limit: number | null
   questions: Question[]
 }
 
@@ -50,6 +52,7 @@ export default function QuizPage() {
   const [isStarting, setIsStarting] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [finalScore, setFinalScore] = useState<number | undefined>(undefined)
+  const [totalTimeLeft, setTotalTimeLeft] = useState<number | null>(null)
 
   // Advanced Proctoring Hook
   const {
@@ -176,6 +179,11 @@ export default function QuizPage() {
 
       setAttemptId(attempt.id)
       setState("taking")
+      
+      if (quiz?.timer_type === "total_time" && quiz.total_time_limit) {
+        localStorage.setItem(`quiz_end_time_${quizId}`, (Date.now() + quiz.total_time_limit * 1000).toString())
+      }
+      
       saveProgress()
     } catch (error) {
       console.error("Error starting quiz:", error)
@@ -272,6 +280,31 @@ export default function QuizPage() {
       setIsSubmitting(false)
     }
   }
+
+  // Global Timer Logic
+  useEffect(() => {
+    if (state !== "taking" || !quiz || quiz.timer_type !== "total_time" || !quiz.total_time_limit) return
+
+    const endTimeStr = localStorage.getItem(`quiz_end_time_${quizId}`)
+    if (!endTimeStr) return
+
+    const endTime = parseInt(endTimeStr)
+    
+    const updateTimer = () => {
+      if (isSubmitting) return
+      const now = Date.now()
+      const remaining = Math.max(0, Math.floor((endTime - now) / 1000))
+      setTotalTimeLeft(remaining)
+      
+      if (remaining <= 0 && !isSubmitting) {
+        submitQuiz(false)
+      }
+    }
+
+    updateTimer()
+    const timer = setInterval(updateTimer, 1000)
+    return () => clearInterval(timer)
+  }, [state, quiz, isSubmitting])
 
   if (state === "loading") {
     return (
@@ -386,20 +419,31 @@ export default function QuizPage() {
           </AlertDialogContent>
         </AlertDialog>
 
-        <QuizQuestion
-          question={currentQuestion}
-          currentIndex={currentQuestionIndex}
-          totalQuestions={quiz.questions.length}
-          selectedAnswer={selectedAnswer}
-          onAnswerChange={handleAnswerChange}
-          onNext={goToNext}
-          onSubmit={() => submitQuiz(false)}
-          canGoNext={selectedAnswer !== ""}
-          isLastQuestion={currentQuestionIndex === quiz.questions.length - 1}
-          hasAnswered={hasAnswered}
-          isSubmitting={isSubmitting}
-          timeLimit={quiz.time_per_question || 30}
-        />
+        {quiz.timer_type === "total_time" && totalTimeLeft !== null && (
+          <div className="fixed top-0 left-0 right-0 bg-white shadow-md z-50 p-4 flex justify-between items-center border-b border-gray-200">
+             <div className="font-semibold text-gray-700">Total Quiz Time Remaining</div>
+             <div className={`font-mono text-xl font-bold ${totalTimeLeft <= 60 ? "text-red-600 animate-pulse" : "text-primary"}`}>
+                {Math.floor(totalTimeLeft / 60)}:{(totalTimeLeft % 60).toString().padStart(2, '0')}
+             </div>
+          </div>
+        )}
+
+        <div className={quiz.timer_type === "total_time" ? "pt-16" : ""}>
+          <QuizQuestion
+            question={currentQuestion}
+            currentIndex={currentQuestionIndex}
+            totalQuestions={quiz.questions.length}
+            selectedAnswer={selectedAnswer}
+            onAnswerChange={handleAnswerChange}
+            onNext={goToNext}
+            onSubmit={() => submitQuiz(false)}
+            canGoNext={selectedAnswer !== ""}
+            isLastQuestion={currentQuestionIndex === quiz.questions.length - 1}
+            hasAnswered={hasAnswered}
+            isSubmitting={isSubmitting}
+            timeLimit={quiz.timer_type === "per_question" ? quiz.time_per_question : null}
+          />
+        </div>
       </>
     )
   }

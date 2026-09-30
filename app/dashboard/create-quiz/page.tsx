@@ -33,7 +33,9 @@ export default function CreateQuizPage() {
   const [user, setUser] = useState<any>(null)
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
-  const [timePerQuestion, setTimePerQuestion] = useState(30)
+  const [timerType, setTimerType] = useState<"none" | "per_question" | "total_time">("none")
+  const [timePerQuestion, setTimePerQuestion] = useState<number | "">("")
+  const [totalTimeLimit, setTotalTimeLimit] = useState<number | "">("")
   const [questions, setQuestions] = useState<Question[]>([
     {
       id: crypto.randomUUID(),
@@ -147,7 +149,9 @@ export default function CreateQuizPage() {
           description: description.trim() || null,
           teacher_id: user.id,
           is_active: true,
-          time_per_question: timePerQuestion,
+          timer_type: timerType,
+          time_per_question: timerType === "per_question" && timePerQuestion !== "" ? timePerQuestion : null,
+          total_time_limit: timerType === "total_time" && totalTimeLimit !== "" ? totalTimeLimit * 60 : null,
         })
         .select()
         .single()
@@ -233,21 +237,60 @@ export default function CreateQuizPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="timePerQuestion">Time Per Question (seconds) *</Label>
-                <Input
-                  id="timePerQuestion"
-                  type="number"
-                  min="5"
-                  max="300"
-                  value={timePerQuestion}
-                  onChange={(e) => setTimePerQuestion(parseInt(e.target.value) || 30)}
-                  className="mt-1"
-                  required
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  How long students have to answer each question. Default is 30 seconds.
-                </p>
+                <Label>Timer Settings</Label>
+                <div className="mt-3 space-y-3 p-4 border rounded-md">
+                  <div className="flex items-center space-x-2">
+                    <input type="radio" id="timer-none" name="timer" checked={timerType === "none"} onChange={() => setTimerType("none")} className="cursor-pointer" />
+                    <Label htmlFor="timer-none" className="cursor-pointer">No Timer</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input type="radio" id="timer-per-question" name="timer" checked={timerType === "per_question"} onChange={() => setTimerType("per_question")} className="cursor-pointer" />
+                    <Label htmlFor="timer-per-question" className="cursor-pointer">Per Question Timer</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input type="radio" id="timer-total" name="timer" checked={timerType === "total_time"} onChange={() => setTimerType("total_time")} className="cursor-pointer" />
+                    <Label htmlFor="timer-total" className="cursor-pointer">Total Quiz Timer</Label>
+                  </div>
+                </div>
               </div>
+
+              {timerType === "per_question" && (
+                <div>
+                  <Label htmlFor="timePerQuestion">Time Per Question (seconds) *</Label>
+                  <Input
+                    id="timePerQuestion"
+                    type="number"
+                    min="5"
+                    max="300"
+                    value={timePerQuestion}
+                    onChange={(e) => setTimePerQuestion(e.target.value ? parseInt(e.target.value) : "")}
+                    className="mt-1"
+                    required
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    How long students have to answer each question.
+                  </p>
+                </div>
+              )}
+
+              {timerType === "total_time" && (
+                <div>
+                  <Label htmlFor="totalTimeLimit">Total Quiz Time (minutes) *</Label>
+                  <Input
+                    id="totalTimeLimit"
+                    type="number"
+                    min="1"
+                    max="180"
+                    value={totalTimeLimit}
+                    onChange={(e) => setTotalTimeLimit(e.target.value ? parseInt(e.target.value) : "")}
+                    className="mt-1"
+                    required
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Total time for the entire quiz in minutes. (e.g. 30 for 30 minutes)
+                  </p>
+                </div>
+              )}
             </CardContent>
           </Card>
 
