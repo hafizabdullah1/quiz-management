@@ -420,14 +420,15 @@ export default function QuizPage() {
         </AlertDialog>
 
         {quiz.timer_type === "total_time" && totalTimeLeft !== null && (
-          <div className="fixed top-0 left-0 right-0 bg-white shadow-md z-50 p-4 flex justify-between items-center border-b border-gray-200">
-             <div className="font-semibold text-gray-700">Total Quiz Time Remaining</div>
-             <div className={`font-mono text-xl font-bold ${totalTimeLeft <= 60 ? "text-red-600 animate-pulse" : "text-primary"}`}>
-                {Math.floor(totalTimeLeft / 60)}:{(totalTimeLeft % 60).toString().padStart(2, '0')}
+          <div className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm shadow-md z-50 p-4 flex justify-end items-center border-b border-gray-200">
+             <div className="flex items-center gap-4">
+               <div className="font-semibold text-gray-700">Total Quiz Time Remaining</div>
+               <div className={`font-mono text-xl font-bold ${totalTimeLeft <= 60 ? "text-red-600 animate-pulse" : "text-primary"}`}>
+                  {Math.floor(totalTimeLeft / 60)}:{(totalTimeLeft % 60).toString().padStart(2, '0')}
+               </div>
              </div>
           </div>
         )}
-
         <div className={quiz.timer_type === "total_time" ? "pt-16" : ""}>
           <QuizQuestion
             question={currentQuestion}
