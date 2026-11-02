@@ -10,13 +10,6 @@ Teacher–student quiz platform with Supabase auth, timed attempts, results, and
 
 This app powers real-world quizzes and assessments at **[VisionX Skills](https://www.visionx.pk)** (an education and training institute). Teachers create and manage quizzes; students take timed assessments in live courses — not a demo-only project.
 
-## Screenshots
-
-<!-- Add PNGs under docs/screenshots/ -->
-| Teacher dashboard | Quiz builder | Student attempt |
-| --- | --- | --- |
-| ![Dashboard](docs/screenshots/dashboard.png) | ![Builder](docs/screenshots/builder.png) | ![Attempt](docs/screenshots/attempt.png) |
-
 ## Key features
 
 - Supabase email/password auth with session middleware
